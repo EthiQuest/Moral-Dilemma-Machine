@@ -379,9 +379,9 @@ function showResults() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
-    createRadarChart('radarChart', Object.keys(scores.pillars).map(capitalizeFirstletter), Object.values(scores.pillars), 'Ethical Leadership Profile');
-    createRadarChart('leanRadarChart', Object.keys(scores.lean).map(capitalizeFirstletter), Object.values(scores.lean), 'Lean Leadership Profile');
-    createRadarChart('teamRadarChart', Object.keys(scores.team).map(capitalizeFirstletter), Object.values(scores.team), 'Team Leadership Profile');
+    createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
+    createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
+    createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
 }
 
 function createSectionHtml(title, scoreObj, chartId) {
