@@ -75,17 +75,14 @@ function startAssessment() {
 }
 
 function resetScores() {
-    for (let pillar in pillars) {
-        pillars[pillar] = 0;
-    }
-
-    psychopathicScore = 0;
-
-    for (let score in leanScores) {
-        leanScores[score] = 0;
-    }
-    for (let score in teamScores) {
-        teamScores[score] = 0;
+    for (const category in scores) {
+        if (typeof scores[category] === 'object') {
+            for (const metric in scores[category]) {
+                scores[category][metric] = 0;
+            }
+        } else {
+            scores[category] = 0;
+        }
     }
 }
 
@@ -97,7 +94,7 @@ function presentDilemma() {
 
     document.getElementById('progress').innerHTML = `<i class="fas fa-tasks"></i> Scenario ${currentDilemma + 1} of ${totalDilemmas}`;
 
-    const dilemma = dilemmaPool[currentDilemma];
+    const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
     document.getElementById('scenario').innerHTML = `<p><i class="fas fa-exclamation-circle"></i> ${dilemma.scenario}</p>`;
     const optionsHtml = dilemma.options.map((option, index) => 
         `<button ontouchstart="this.classList.add('active')" ontouchend="this.classList.remove('active');makeChoice(${index})" class="icon-text"><i class="fas fa-check-circle"></i> ${option.text}</button>`
@@ -106,22 +103,19 @@ function presentDilemma() {
 }
 
 function makeChoice(choiceIndex) {
-    const dilemma = dilemmaPool[currentDilemma];
+    const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
     const chosenOption = dilemma.options[choiceIndex];
-    for (const [pillar, score] of Object.entries(chosenOption.scores)) {
-        pillars[pillar] += score;
+    
+    for (const category in chosenOption.scores) {
+        if (category === 'psychopathic') {
+            scores[category] += chosenOption.scores[category];
+        } else {
+            for (const metric in chosenOption.scores[category]) {
+                scores[category][metric] += chosenOption.scores[category][metric];
+            }
+        }
     }
-
-    psychopathicScore += chosenOption.psychopathic;
-
-    for (const [leanScore, score] of Object.entries(chosenOption.scores)) {
-        leanScores[leanScore] += score;
-    }
-
-    for (const [teamScore, score] of Object.entries(chosenOption.scores)) {
-        teamScores[teamScore] += score;
-    }
-
+    
     currentDilemma++;
     
     if (currentDilemma >= totalDilemmas) {
@@ -134,38 +128,35 @@ function makeChoice(choiceIndex) {
 function showResults() {
     console.log("Showing results");
     let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment:</h2>";
-    let totalScore = 0;
-    let chartData = [];
     
-    const maxPossibleScore = totalDilemmas * 3;
-    const minPossibleScore = totalDilemmas * -3;
-    
-    for (const [pillar, score] of Object.entries(pillars)) {
-        const normalizedScore = ((score - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
-        const percentage = normalizedScore.toFixed(2);
-        resultHtml += `<p><i class="fas fa-star"></i> ${pillar}: ${score} (${percentage}%)</p>`;
-        totalScore += score;
-        chartData.push(parseFloat(percentage));
+    // Ethical Pillars Results
+    resultHtml += "<h3>Ethical Leadership:</h3>";
+    let totalPillarScore = 0;
+    const pillarData = [];
+    for (const [pillar, score] of Object.entries(scores.pillars)) {
+        const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
+        resultHtml += `<p><i class="fas fa-star"></i> ${pillar}: ${score} (${normalizedScore.toFixed(2)}%)</p>`;
+        totalPillarScore += score;
+        pillarData.push(normalizedScore);
     }
 
-    let overallPercentage = ((totalScore - (minPossibleScore * 6)) / ((maxPossibleScore - minPossibleScore) * 6)) * 100;
-    let overallAssessment = "";
-    if (overallPercentage > 80) {
-        overallAssessment = "Your decisions demonstrate a very strong ethical leadership style.";
-    } else if (overallPercentage > 60) {
-        overallAssessment = "Your decisions show a good ethical leadership approach, with some room for improvement.";
-    } else if (overallPercentage > 40) {
-        overallAssessment = "Your decisions demonstrate a mixed ethical approach. There's significant room for improvement in ethical leadership.";
-    } else if (overallPercentage > 20) {
-        overallAssessment = "Your decisions often prioritize other factors over ethical considerations. This approach carries ethical risks in leadership.";
-    } else {
-        overallAssessment = "Your decisions consistently demonstrate a disregard for ethical leadership principles. This approach carries significant risks and is not recommended.";
+    const overallPillarPercentage = ((totalPillarScore + totalDilemmas * 18) / (totalDilemmas * 36)) * 100;
+    resultHtml += `<p><strong><i class="fas fa-poll"></i> Overall Ethical Score:</strong> ${totalPillarScore} (${overallPillarPercentage.toFixed(2)}%)</p>`;
+
+    // Lean Leadership Results
+    resultHtml += "<h3>Lean Leadership:</h3>";
+    for (const [metric, score] of Object.entries(scores.lean)) {
+        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
     }
 
-    resultHtml += `<p><strong><i class="fas fa-poll"></i> Overall Score:</strong> ${totalScore} (${overallPercentage.toFixed(2)}%)</p>`;
-    resultHtml += `<p><strong><i class="fas fa-comment-alt"></i> Overall Assessment:</strong> ${overallAssessment}</p>`;
+    // Team Leadership Results
+    resultHtml += "<h3>Team Leadership:</h3>";
+    for (const [metric, score] of Object.entries(scores.team)) {
+        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
+    }
 
-    let psychopathicPercentage = (psychopathicScore / (totalDilemmas * 2)) * 100;
+    // Psychopathic Tendency
+    const psychopathicPercentage = (scores.psychopathic / (totalDilemmas * 2)) * 100;
     if (psychopathicPercentage > 70) {
         resultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
     } else if (psychopathicPercentage > 40) {
@@ -176,31 +167,17 @@ function showResults() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
-    createEthicalRadarChart(chartData);
+    createEthicalRadarChart(pillarData);
     createLeanRadarChart();
     createTeamRadarChart();
-
-    // Add textual results for new metrics
-    resultHtml += "<h3>Lean Leadership and Flow:</h3>";
-    for (const [metric, score] of Object.entries(leanScores)) {
-        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
-    }
-
-    resultHtml += "<h3>Team and Psychological Safety:</h3>";
-    for (const [metric, score] of Object.entries(teamScores)) {
-        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
-    }
-
-    document.getElementById('result').innerHTML = resultHtml;
-}
 }
 
 function createEthicalRadarChart(data) {
-    const ctx = document.getElementById('ethicalRadarChart').getContext('2d');
+    const ctx = document.getElementById('radarChart').getContext('2d');
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Trustworthiness', 'Respect', 'Responsibility', 'Fairness', 'Caring', 'Citizenship'],
+            labels: Object.keys(scores.pillars),
             datasets: [{
                 label: 'Ethical Leadership Profile',
                 data: data,
@@ -236,10 +213,10 @@ function createLeanRadarChart() {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Value Stream Optimization', 'Continuous Improvement', 'Waste Reduction', 'Flow Efficiency'],
+            labels: Object.keys(scores.lean),
             datasets: [{
                 label: 'Lean Leadership Profile',
-                data: Object.values(leanScores),
+                data: Object.values(scores.lean),
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgb(255, 99, 132)',
                 pointBackgroundColor: 'rgb(255, 99, 132)',
@@ -272,10 +249,10 @@ function createTeamRadarChart() {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Psychological Safety', 'Conflict Resolution', 'Collaborative Culture', 'Employee Empowerment'],
+            labels: Object.keys(scores.team),
             datasets: [{
                 label: 'Team Leadership Profile',
-                data: Object.values(teamScores),
+                data: Object.values(scores.team),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgb(75, 192, 192)',
                 pointBackgroundColor: 'rgb(75, 192, 192)',
@@ -315,18 +292,18 @@ function checkHRCode() {
 function showHRDetails() {
     let hrResultHtml = "<h2><i class='fas fa-user-shield'></i> HR Detailed Assessment Results</h2>";
     
-    let psychopathicPercentage = (psychopathicScore / (totalDilemmas * 2)) * 100;
-    hrResultHtml += `<p><strong><i class='fas fa-brain'></i> Psychopathic Tendency Score:</strong> ${psychopathicScore} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
+    const psychopathicPercentage = (scores.psychopathic / (totalDilemmas * 2)) * 100;
+    hrResultHtml += `<p><strong>Psychopathic Tendency Score:</strong> ${scores.psychopathic} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
     
     if (psychopathicPercentage > 70) {
-        hrResultHtml += "<p><strong><i class='fas fa-exclamation-circle'></i> Assessment:</strong> The participant's responses show a high level of psychopathic tendencies. Their decision-making demonstrates significant lack of empathy, manipulativeness, and disregard for others' wellbeing. This individual may pose serious risks in leadership positions.</p>";
+        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses show a high level of psychopathic tendencies. Their decision-making demonstrates significant lack of empathy, manipulativeness, and disregard for others' wellbeing. This individual may pose serious risks in leadership positions.</p>";
     } else if (psychopathicPercentage > 40) {
-        hrResultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Assessment:</strong> The participant's responses indicate moderate psychopathic tendencies. Their decisions often lack empathy and consideration for others. This could lead to problematic leadership behaviors and should be addressed.</p>";
+        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses indicate moderate psychopathic tendencies. Their decisions often lack empathy and consideration for others. This could lead to problematic leadership behaviors and should be addressed.</p>";
     } else {
-        hrResultHtml += "<p><strong><i class='fas fa-check-circle'></i> Assessment:</strong> The participant's responses do not indicate significant psychopathic tendencies. Their decision-making generally shows consideration for others and ethical principles.</p>";
+        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses do not indicate significant psychopathic tendencies. Their decision-making generally shows consideration for others and ethical principles.</p>";
     }
 
-    hrResultHtml += "<p><strong><i class='fas fa-clipboard-list'></i> Recommendation:</strong> ";
+    hrResultHtml += "<p><strong>Recommendation:</strong> ";
     if (psychopathicPercentage > 60) {
         hrResultHtml += "Consider additional psychological evaluation before placing this individual in leadership roles. Close monitoring and mentoring may be necessary if already in a leadership position.</p>";
     } else if (psychopathicPercentage > 30) {
