@@ -1,371 +1,60 @@
 const HR_SECRET_CODE = 'HR1234';
 let currentDilemma = 0;
 let totalDilemmas = 20;
-const pillars = {
-    "Trustworthiness": 0,
-    "Respect": 0,
-    "Responsibility": 0,
-    "Fairness": 0,
-    "Caring": 0,
-    "Citizenship": 0
+const scores = {
+    pillars: {
+        trustworthiness: 0,
+        respect: 0,
+        responsibility: 0,
+        fairness: 0,
+        caring: 0,
+        citizenship: 0
+    },
+    lean: {
+        valueStreamOptimization: 0,
+        continuousImprovement: 0,
+        wasteReduction: 0,
+        flowEfficiency: 0
+    },
+    team: {
+        psychologicalSafety: 0,
+        conflictResolution: 0,
+        collaborativeCulture: 0,
+        employeeEmpowerment: 0
+    },
+    psychopathic: 0
 };
-
-const leanScores = {
-    "valueStreamOptimization": 0,
-    "continuousImprovement": 0,
-    "wasteReduction": 0,
-    "flowEfficiency": 0
-};
-
-const teamScores = {
-    "psychologicalSafety": 0,
-    "conflictResolution": 0,
-    "collaborativeCulture": 0,
-    "employeeEmpowerment": 0
-};
-
-let psychopathicScore = 0;
 
 const dilemmaPool = [
-    {
-        scenario: "An employee consistently arrives late but produces high-quality work. How do you respond?",
-        options: [
-            {
-                text: "Strictly enforce punctuality rules and issue a formal warning.",
-                scores: { Trustworthiness: 2, Respect: -1, Responsibility: 2, Fairness: 1, Caring: -2, Citizenship: 0 },
-                psychopathic: 1
-            },
-            {
-                text: "Have a private conversation to understand the reasons and find a solution.",
-                scores: { Trustworthiness: 1, Respect: 3, Responsibility: 1, Fairness: 0, Caring: 3, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore the tardiness as long as work quality remains high.",
-                scores: { Trustworthiness: -2, Respect: 1, Responsibility: -3, Fairness: -2, Caring: 0, Citizenship: -1 },
-                psychopathic: 2
-            }
-        ]
-    },
-    {
-        scenario: "An employee consistently arrives late but produces high-quality work. How do you respond?",
-        options: [
-            {
-                text: "Strictly enforce punctuality rules and issue a formal warning.",
-                scores: { Trustworthiness: 2, Respect: -1, Responsibility: 2, Fairness: 1, Caring: -2, Citizenship: 0 },
-                psychopathic: 1
-            },
-            {
-                text: "Have a private conversation to understand the reasons and find a solution.",
-                scores: { Trustworthiness: 1, Respect: 3, Responsibility: 1, Fairness: 0, Caring: 3, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore the tardiness as long as work quality remains high.",
-                scores: { Trustworthiness: -2, Respect: 1, Responsibility: -3, Fairness: -2, Caring: 0, Citizenship: -1 },
-                psychopathic: 2
-            }
-        ]
-    },
-    {
-        scenario: "You discover a minor accounting error that would increase profits if left uncorrected. What do you do?",
-        options: [
-            {
-                text: "Correct the error immediately, even if it reduces profits.",
-                scores: { Trustworthiness: 3, Respect: 1, Responsibility: 3, Fairness: 3, Caring: 1, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore the error since it benefits the company and is unlikely to be noticed.",
-                scores: { Trustworthiness: -3, Respect: 0, Responsibility: -2, Fairness: -3, Caring: -1, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Consult with your team before making a decision.",
-                scores: { Trustworthiness: 1, Respect: 2, Responsibility: 1, Fairness: 1, Caring: 1, Citizenship: 2 },
-                psychopathic: 0
-            }
-        ]
-    },
-    {
-        scenario: "A talented employee asks for a raise you know the company can't afford. How do you handle it?",
-        options: [
-            {
-                text: "Deny the raise but offer other non-monetary benefits.",
-                scores: { Trustworthiness: 1, Respect: 1, Responsibility: 2, Fairness: 1, Caring: 1, Citizenship: 1 },
-                psychopathic: 0
-            },
-            {
-                text: "Lie about the company's financial situation to avoid conflict.",
-                scores: { Trustworthiness: -3, Respect: -1, Responsibility: -2, Fairness: -2, Caring: -1, Citizenship: -1 },
-                psychopathic: 2
-            },
-            {
-                text: "Be honest about the situation and risk losing the employee.",
-                scores: { Trustworthiness: 3, Respect: 2, Responsibility: 2, Fairness: 2, Caring: 0, Citizenship: 1 },
-                psychopathic: 0
-            }
-        ]
-    },
-    {
-        scenario: "You overhear a racist comment from a high-performing employee. What action do you take?",
-        options: [
-            {
-                text: "Immediately confront the employee and issue a warning.",
-                scores: { Trustworthiness: 2, Respect: 2, Responsibility: 3, Fairness: 3, Caring: 1, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore it to avoid conflict with a valuable team member.",
-                scores: { Trustworthiness: -2, Respect: -3, Responsibility: -3, Fairness: -3, Caring: -2, Citizenship: -3 },
-                psychopathic: 2
-            },
-            {
-                text: "Organize a company-wide diversity training without singling anyone out.",
-                scores: { Trustworthiness: 1, Respect: 2, Responsibility: 1, Fairness: 1, Caring: 2, Citizenship: 3 },
-                psychopathic: 0
-            }
-        ]
-    },
-    {
-        scenario: "A client asks you to lie to their stakeholders about project progress. How do you respond?",
-        options: [
-            {
-                text: "Refuse and explain that it goes against your ethical principles.",
-                scores: { Trustworthiness: 3, Respect: 1, Responsibility: 3, Fairness: 3, Caring: 1, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Agree to avoid losing the client's business.",
-                scores: { Trustworthiness: -3, Respect: -1, Responsibility: -3, Fairness: -3, Caring: -1, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Suggest an alternative that doesn't involve lying but still addresses their concerns.",
-                scores: { Trustworthiness: 2, Respect: 2, Responsibility: 2, Fairness: 2, Caring: 2, Citizenship: 2 },
-                psychopathic: 0
-            }
-        ]
-    },
-    {
-        scenario: "You notice a colleague taking office supplies home for personal use. What do you do?",
-        options: [
-            {
-                text: "Report the colleague to management immediately.",
-                scores: { Trustworthiness: 2, Respect: -1, Responsibility: 3, Fairness: 2, Caring: -1, Citizenship: 1 },
-                psychopathic: 1
-            },
-            {
-                text: "Confront the colleague privately and ask them to stop.",
-                scores: { Trustworthiness: 2, Respect: 2, Responsibility: 2, Fairness: 2, Caring: 2, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore it as it's a minor issue.",
-                scores: { Trustworthiness: -2, Respect: 0, Responsibility: -2, Fairness: -2, Caring: 0, Citizenship: -1 },
-                psychopathic: 1
-            }
-        ]
-    },
-    {
-        scenario: "Your company is considering outsourcing jobs to cut costs, potentially leading to local layoffs. What's your stance?",
-        options: [
-            {
-                text: "Support outsourcing to improve company profits and competitiveness.",
-                scores: { Trustworthiness: 0, Respect: -2, Responsibility: 1, Fairness: -2, Caring: -3, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Oppose outsourcing and advocate for finding internal efficiency improvements.",
-                scores: { Trustworthiness: 1, Respect: 2, Responsibility: 1, Fairness: 2, Caring: 3, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Suggest a gradual transition with support for affected employees.",
-                scores: { Trustworthiness: 2, Respect: 1, Responsibility: 2, Fairness: 1, Caring: 2, Citizenship: 1 },
-                psychopathic: 1
-            }
-        ]
-    },
-    {
-        scenario: "You discover that a popular product your company sells has a potential safety issue. How do you proceed?",
-        options: [
-            {
-                text: "Immediately halt sales and issue a public recall.",
-                scores: { Trustworthiness: 3, Respect: 2, Responsibility: 3, Fairness: 2, Caring: 3, Citizenship: 3 },
-                psychopathic: 0
-            },
-            {
-                text: "Quietly fix the issue in future production without a public announcement.",
-                scores: { Trustworthiness: -2, Respect: -1, Responsibility: -1, Fairness: -2, Caring: -2, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Conduct more testing before making a decision.",
-                scores: { Trustworthiness: 1, Respect: 1, Responsibility: 1, Fairness: 1, Caring: 1, Citizenship: 1 },
-                psychopathic: 1
-            }
-        ]
-    },
-    {
-        scenario: "An employee is struggling with mental health issues affecting their work. How do you address this?",
-        options: [
-            {
-                text: "Begin the process of terminating their employment.",
-                scores: { Trustworthiness: 1, Respect: -3, Responsibility: 1, Fairness: -2, Caring: -3, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Offer support and resources, and temporarily reassign some duties.",
-                scores: { Trustworthiness: 1, Respect: 3, Responsibility: 1, Fairness: 1, Caring: 3, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Maintain performance expectations but extend deadlines.",
-                scores: { Trustworthiness: 2, Respect: 1, Responsibility: 2, Fairness: 2, Caring: 1, Citizenship: 1 },
-                psychopathic: 1
-            }
-        ]
-    },
-    {
-        scenario: "You have inside information that your company's stock will likely drop. What do you do?",
-        options: [
-            {
-                text: "Sell your company stock before the drop.",
-                scores: { Trustworthiness: -3, Respect: -1, Responsibility: -3, Fairness: -3, Caring: -1, Citizenship: -2 },
-                psychopathic: 2
-            },
-            {
-                text: "Hold your stock and don't act on the information.",
-                scores: { Trustworthiness: 3, Respect: 1, Responsibility: 3, Fairness: 3, Caring: 1, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Quietly advise close colleagues to sell their stock.",
-                scores: { Trustworthiness: -2, Respect: 1, Responsibility: -2, Fairness: -2, Caring: 1, Citizenship: -1 },
-                psychopathic: 1
-            }
-        ]
-    },
-    {
-        scenario: "You notice a colleague is struggling with addiction, affecting their work. What action do you take?",
-        options: [
-            {
-                text: "Report them to HR immediately.",
-                scores: { Trustworthiness: 1, Respect: -1, Responsibility: 2, Fairness: 1, Caring: 0, Citizenship: 1 },
-                psychopathic: 1
-            },
-            {
-                text: "Approach them privately and offer support and resources.",
-                scores: { Trustworthiness: 2, Respect: 3, Responsibility: 2, Fairness: 1, Caring: 3, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Ignore it as it's not your responsibility.",
-                scores: { Trustworthiness: -1, Respect: -2, Responsibility: -2, Fairness: -1, Caring: -3, Citizenship: -2 },
-                psychopathic: 2
-            }
-        ]
-    },
-    {
-        scenario: "A whistleblower in your department reports unethical practices. How do you handle this?",
-        options: [
-            {
-                text: "Fully support the investigation and protect the whistleblower's identity.",
-                scores: { Trustworthiness: 3, Respect: 2, Responsibility: 3, Fairness: 3, Caring: 2, Citizenship: 3 },
-                psychopathic: 0
-            },
-            {
-                text: "Conduct an internal investigation without involving higher management.",
-                scores: { Trustworthiness: 1, Respect: 1, Responsibility: 1, Fairness: 1, Caring: 1, Citizenship: 1 },
-                psychopathic: 1
-            },
-            {
-                text: "Discourage the whistleblower and try to minimize the issue.",
-                scores: { Trustworthiness: -3, Respect: -2, Responsibility: -3, Fairness: -3, Caring: -2, Citizenship: -3 },
-                psychopathic: 2
-            }
-        ]
-    },
-    {
-        scenario: "Your company is considering a merger that would lead to job losses. You're asked to keep it confidential. What do you do?",
-        options: [
-            {
-                text: "Maintain strict confidentiality as requested.",
-                scores: { Trustworthiness: 3, Respect: 1, Responsibility: 2, Fairness: 0, Caring: -1, Citizenship: 1 },
-                psychopathic: 1
-            },
-            {
-                text: "Inform your team to allow them to prepare for potential job losses.",
-                scores: { Trustworthiness: -2, Respect: 2, Responsibility: -1, Fairness: 1, Caring: 2, Citizenship: 1 },
-                psychopathic: 0
-            },
-            {
-                text: "Leak the information anonymously to the press.",
-                scores: { Trustworthiness: -3, Respect: -1, Responsibility: -2, Fairness: 1, Caring: 1, Citizenship: -1 },
-                psychopathic: 2
-            }
-        ]
-    },
-    {
-        scenario: "A team member proposes an idea that you know is yours from a previous job. How do you respond?",
-        options: [
-            {
-                text: "Confront the team member about stealing your idea.",
-                scores: { Trustworthiness: 1, Respect: -2, Responsibility: 1, Fairness: 1, Caring: -2, Citizenship: -1 },
-                psychopathic: 1
-            },
-            {
-                text: "Quietly support the idea without mentioning its origin.",
-                scores: { Trustworthiness: 1, Respect: 2, Responsibility: 1, Fairness: 1, Caring: 2, Citizenship: 2 },
-                psychopathic: 0
-            },
-            {
-                text: "Claim credit for the idea yourself.",
-                scores: { Trustworthiness: -2, Respect: -2, Responsibility: -1, Fairness: -2, Caring: -2, Citizenship: -2 },
-                psychopathic: 2
-            }
-        ]
-    },
     {
         scenario: "Your team is consistently missing deadlines. How do you address this issue?",
         options: [
             {
                 text: "Implement stricter monitoring and penalties for missed deadlines.",
-                scores: { Trustworthiness: 1, Respect: -2, Responsibility: 1, Fairness: 0, Caring: -2, Citizenship: -1,   valueStreamOptimization: -1,
-                continuousImprovement: 0,
-                wasteReduction: 1,
-                flowEfficiency: -2,
-                psychologicalSafety: -3,
-                conflictResolution: -2,
-                collaborativeCulture: -2,
-                employeeEmpowerment: -3  },
-                psychopathic: 1           
+                scores: {
+                    pillars: { trustworthiness: 1, respect: -2, responsibility: 1, fairness: 0, caring: -2, citizenship: -1 },
+                    lean: { valueStreamOptimization: -1, continuousImprovement: 0, wasteReduction: 1, flowEfficiency: -2 },
+                    team: { psychologicalSafety: -3, conflictResolution: -2, collaborativeCulture: -2, employeeEmpowerment: -3 },
+                    psychopathic: 1
+                }
             },
             {
                 text: "Conduct a team workshop to identify bottlenecks and improve processes.",
-                scores: { Trustworthiness: 2, Respect: 2, Responsibility: 2, Fairness: 2, Caring: 2, Citizenship: 2,   valueStreamOptimization: 3,
-                continuousImprovement: 3,
-                wasteReduction: 2,
-                flowEfficiency: 3,
-                psychologicalSafety: 2,
-                conflictResolution: 2,
-                collaborativeCulture: 3,
-                employeeEmpowerment: 2   },
-                psychopathic: 0
+                scores: {
+                    pillars: { trustworthiness: 2, respect: 2, responsibility: 2, fairness: 2, caring: 2, citizenship: 2 },
+                    lean: { valueStreamOptimization: 3, continuousImprovement: 3, wasteReduction: 2, flowEfficiency: 3 },
+                    team: { psychologicalSafety: 2, conflictResolution: 2, collaborativeCulture: 3, employeeEmpowerment: 2 },
+                    psychopathic: 0
+                }
             },
             {
                 text: "Extend all deadlines to ensure they're always met.",
-                scores: { Trustworthiness: -1, Respect: 1, Responsibility: -2, Fairness: 0, Caring: 1, Citizenship: -1,   valueStreamOptimization: -2,
-                continuousImprovement: -1,
-                wasteReduction: -2,
-                flowEfficiency: -1,
-                psychologicalSafety: 1,
-                conflictResolution: 0,
-                collaborativeCulture: -1,
-                employeeEmpowerment: -1    },
-                psychopathic: 1
-                
+                scores: {
+                    pillars: { trustworthiness: -1, respect: 1, responsibility: -2, fairness: 0, caring: 1, citizenship: -1 },
+                    lean: { valueStreamOptimization: -2, continuousImprovement: -1, wasteReduction: -2, flowEfficiency: -1 },
+                    team: { psychologicalSafety: 1, conflictResolution: 0, collaborativeCulture: -1, employeeEmpowerment: -1 },
+                    psychopathic: 1
+                }
             }
         ]
     },
