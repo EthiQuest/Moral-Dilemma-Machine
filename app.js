@@ -394,7 +394,7 @@ function resetScores() {
 
     psychopathicScore = 0;
 
-for (let score in leanScores) {
+    for (let score in leanScores) {
         leanScores[score] = 0;
     }
     for (let score in teamScores) {
