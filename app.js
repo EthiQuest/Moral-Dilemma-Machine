@@ -435,7 +435,15 @@ function resetScores() {
     for (let pillar in pillars) {
         pillars[pillar] = 0;
     }
+
     psychopathicScore = 0;
+
+for (let score in leanScores) {
+        leanScores[score] = 0;
+    }
+    for (let score in teamScores) {
+        teamScores[score] = 0;
+    }
 }
 
 function presentDilemma() {
