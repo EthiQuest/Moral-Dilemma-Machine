@@ -351,59 +351,64 @@ function makeChoice(choiceIndex) {
 
 function showResults() {
     console.log("Showing results");
-    let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment:</h2>";
-    
-    // Ethical Pillars Results
-    resultHtml += "<h3>Ethical Leadership:</h3>";
-    let totalPillarScore = 0;
-    const pillarData = [];
-    for (const [pillar, score] of Object.entries(scores.pillars)) {
-        const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
-        resultHtml += `<p><i class="fas fa-star"></i> ${pillar}: ${score} (${normalizedScore.toFixed(2)}%)</p>`;
-        totalPillarScore += score;
-        pillarData.push(normalizedScore);
-    }
+    let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
 
-    const overallPillarPercentage = ((totalPillarScore + totalDilemmas * 18) / (totalDilemmas * 36)) * 100;
-    resultHtml += `<p><strong><i class="fas fa-poll"></i> Overall Ethical Score:</strong> ${totalPillarScore} (${overallPillarPercentage.toFixed(2)}%)</p>`;
+    // Ethical Leadership Section
+    resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
 
-    // Lean Leadership Results
-    resultHtml += "<h3>Lean Leadership:</h3>";
-    for (const [metric, score] of Object.entries(scores.lean)) {
-        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
-    }
+    // Lean Leadership Section
+    resultHtml += createSectionHtml("Lean Leadership", scores.lean, 'leanRadarChart');
 
-    // Team Leadership Results
-    resultHtml += "<h3>Team Leadership:</h3>";
-    for (const [metric, score] of Object.entries(scores.team)) {
-        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
-    }
+    // Team Leadership Section
+    resultHtml += createSectionHtml("Team Leadership", scores.team, 'teamRadarChart');
 
     // Psychopathic Tendency
     const psychopathicPercentage = (scores.psychopathic / (totalDilemmas * 2)) * 100;
+    resultHtml += "<h3>Psychopathic Tendency</h3>";
+    resultHtml += `<p><strong>Score:</strong> ${scores.psychopathic} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
     if (psychopathicPercentage > 70) {
         resultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
     } else if (psychopathicPercentage > 40) {
         resultHtml += "<p><strong><i class='fas fa-info-circle'></i> Note:</strong> Your decisions sometimes reflect a lack of empathy or consideration for others, which could impact your effectiveness as a leader.</p>";
+    } else {
+        resultHtml += "<p><strong><i class='fas fa-check-circle'></i> Note:</strong> Your decisions generally reflect empathy and consideration for others, which is positive for leadership roles.</p>";
     }
 
     document.getElementById('result').innerHTML = resultHtml;
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
-    createEthicalRadarChart(pillarData);
-    createLeanRadarChart();
-    createTeamRadarChart();
+    createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
+    createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
+    createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
 }
 
-function createEthicalRadarChart(data) {
-    const ctx = document.getElementById('radarChart').getContext('2d');
+function createSectionHtml(title, scoreObj, chartId) {
+    let sectionHtml = `<h3>${title}</h3>`;
+    let totalScore = 0;
+    const maxPossibleScore = totalDilemmas * 3 * Object.keys(scoreObj).length;
+
+    for (const [metric, score] of Object.entries(scoreObj)) {
+        const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
+        sectionHtml += `<p><strong>${metric}:</strong> ${score} (${normalizedScore.toFixed(2)}%)</p>`;
+        totalScore += score;
+    }
+
+    const overallPercentage = ((totalScore + maxPossibleScore / 2) / maxPossibleScore) * 100;
+    sectionHtml += `<p><strong>Overall ${title} Score:</strong> ${totalScore} out of ${maxPossibleScore} (${overallPercentage.toFixed(2)}%)</p>`;
+    sectionHtml += `<canvas id="${chartId}" width="400" height="400"></canvas>`;
+
+    return sectionHtml;
+}
+
+function createRadarChart(canvasId, labels, data, title) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: Object.keys(scores.pillars),
+            labels: labels,
             datasets: [{
-                label: 'Ethical Leadership Profile',
+                label: title,
                 data: data,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgb(54, 162, 235)',
@@ -424,85 +429,28 @@ function createEthicalRadarChart(data) {
                     angleLines: {
                         display: false
                     },
-                    suggestedMin: 0,
-                    suggestedMax: 100
+                    suggestedMin: -totalDilemmas * 3,
+                    suggestedMax: totalDilemmas * 3,
+                    ticks: {
+                        stepSize: totalDilemmas
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: title
                 }
             }
         }
     });
 }
 
-function createLeanRadarChart() {
-    const ctx = document.getElementById('leanRadarChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: Object.keys(scores.lean),
-            datasets: [{
-                label: 'Lean Leadership Profile',
-                data: Object.values(scores.lean),
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(255, 99, 132)',
-                pointBackgroundColor: 'rgb(255, 99, 132)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(255, 99, 132)'
-            }]
-        },
-        options: {
-            elements: {
-                line: {
-                    borderWidth: 3
-                }
-            },
-            scales: {
-                r: {
-                    angleLines: {
-                        display: false
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 100
-                }
-            }
-        }
-    });
-}
 
-function createTeamRadarChart() {
-    const ctx = document.getElementById('teamRadarChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: Object.keys(scores.team),
-            datasets: [{
-                label: 'Team Leadership Profile',
-                data: Object.values(scores.team),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgb(75, 192, 192)',
-                pointBackgroundColor: 'rgb(75, 192, 192)',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgb(75, 192, 192)'
-            }]
-        },
-        options: {
-            elements: {
-                line: {
-                    borderWidth: 3
-                }
-            },
-            scales: {
-                r: {
-                    angleLines: {
-                        display: false
-                    },
-                    suggestedMin: 0,
-                    suggestedMax: 100
-                }
-            }
-        }
-    });
-}
 
 function checkHRCode() {
     const inputCode = document.getElementById('hrCodeInput').value;
