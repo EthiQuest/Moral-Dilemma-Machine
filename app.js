@@ -349,6 +349,7 @@ function makeChoice(choiceIndex) {
     }
 }
 
+
 function showResults() {
     console.log("Showing results");
     let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
@@ -449,7 +450,6 @@ function createRadarChart(canvasId, labels, data, title) {
         }
     });
 }
-
 
 
 function checkHRCode() {
