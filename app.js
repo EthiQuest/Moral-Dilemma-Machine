@@ -435,11 +435,27 @@ function showResults() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
-    createRadarChart(chartData);
+    createEthicalRadarChart(chartData);
+    createLeanRadarChart();
+    createTeamRadarChart();
+
+    // Add textual results for new metrics
+    resultHtml += "<h3>Lean Leadership and Flow:</h3>";
+    for (const [metric, score] of Object.entries(leanScores)) {
+        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
+    }
+
+    resultHtml += "<h3>Team and Psychological Safety:</h3>";
+    for (const [metric, score] of Object.entries(teamScores)) {
+        resultHtml += `<p><strong>${metric}:</strong> ${score}</p>`;
+    }
+
+    document.getElementById('result').innerHTML = resultHtml;
+}
 }
 
-function createRadarChart(data) {
-    const ctx = document.getElementById('radarChart').getContext('2d');
+function createEthicalRadarChart(data) {
+    const ctx = document.getElementById('ethicalRadarChart').getContext('2d');
     new Chart(ctx, {
         type: 'radar',
         data: {
@@ -453,6 +469,78 @@ function createRadarChart(data) {
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
                 pointHoverBorderColor: 'rgb(54, 162, 235)'
+            }]
+        },
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 3
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            }
+        }
+    });
+}
+
+function createLeanRadarChart() {
+    const ctx = document.getElementById('leanRadarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Value Stream Optimization', 'Continuous Improvement', 'Waste Reduction', 'Flow Efficiency'],
+            datasets: [{
+                label: 'Lean Leadership Profile',
+                data: Object.values(leanScores),
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255, 99, 132)',
+                pointBackgroundColor: 'rgb(255, 99, 132)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(255, 99, 132)'
+            }]
+        },
+        options: {
+            elements: {
+                line: {
+                    borderWidth: 3
+                }
+            },
+            scales: {
+                r: {
+                    angleLines: {
+                        display: false
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100
+                }
+            }
+        }
+    });
+}
+
+function createTeamRadarChart() {
+    const ctx = document.getElementById('teamRadarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Psychological Safety', 'Conflict Resolution', 'Collaborative Culture', 'Employee Empowerment'],
+            datasets: [{
+                label: 'Team Leadership Profile',
+                data: Object.values(teamScores),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgb(75, 192, 192)',
+                pointBackgroundColor: 'rgb(75, 192, 192)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(75, 192, 192)'
             }]
         },
         options: {
