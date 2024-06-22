@@ -370,7 +370,51 @@ const dilemmaPool = [
             employeeEmpowerment: -1
         }
     ]
-}
+},
+    {
+        scenario: "Your team is consistently missing deadlines. How do you address this issue?",
+        options: [
+            {
+                text: "Implement stricter monitoring and penalties for missed deadlines.",
+                scores: { Trustworthiness: 1, Respect: -2, Responsibility: 1, Fairness: 0, Caring: -2, Citizenship: -1 },
+                psychopathic: 1,
+                valueStreamOptimization: -1,
+                continuousImprovement: 0,
+                wasteReduction: 1,
+                flowEfficiency: -2,
+                psychologicalSafety: -3,
+                conflictResolution: -2,
+                collaborativeCulture: -2,
+                employeeEmpowerment: -3
+            },
+            {
+                text: "Conduct a team workshop to identify bottlenecks and improve processes.",
+                scores: { Trustworthiness: 2, Respect: 2, Responsibility: 2, Fairness: 2, Caring: 2, Citizenship: 2 },
+                psychopathic: 0,
+                valueStreamOptimization: 3,
+                continuousImprovement: 3,
+                wasteReduction: 2,
+                flowEfficiency: 3,
+                psychologicalSafety: 2,
+                conflictResolution: 2,
+                collaborativeCulture: 3,
+                employeeEmpowerment: 2
+            },
+            {
+                text: "Extend all deadlines to ensure they're always met.",
+                scores: { Trustworthiness: -1, Respect: 1, Responsibility: -2, Fairness: 0, Caring: 1, Citizenship: -1 },
+                psychopathic: 1,
+                valueStreamOptimization: -2,
+                continuousImprovement: -1,
+                wasteReduction: -2,
+                flowEfficiency: -1,
+                psychologicalSafety: 1,
+                conflictResolution: 0,
+                collaborativeCulture: -1,
+                employeeEmpowerment: -1
+            }
+        ]
+    },
     // Add more dilemmas here...
 ];
 
