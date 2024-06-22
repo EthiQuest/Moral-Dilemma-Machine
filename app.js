@@ -441,8 +441,11 @@ function createSectionHtml(title, scoreObj, chartId) {
     sectionHtml += "<thead><tr><th>Metric</th><th>Score</th><th>Percentage</th></tr></thead><tbody>";
 
     for (const [metric, score] of Object.entries(scoreObj)) {
-        // Normalize the score to a 0-100 range
-        const normalizedScore = ((score - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
+        // For individual metrics, normalize based on the possible range for a single metric
+        const singleMetricMax = totalDilemmas * 3;
+        const singleMetricMin = totalDilemmas * -3;
+        const normalizedScore = ((score - singleMetricMin) / (singleMetricMax - singleMetricMin)) * 100;
+        
         sectionHtml += `<tr>
             <td>${capitalizeFirstLetter(metric)}</td>
             <td>${score}</td>
