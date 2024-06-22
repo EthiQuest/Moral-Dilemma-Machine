@@ -84,19 +84,34 @@ input[type="number"] {
             margin-right: 10px;
         }
 
-
 .score-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
+
 .score-table th, .score-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
+
 .score-table th {
     background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.score-table td:nth-child(2),
+.score-table td:nth-child(3),
+.score-table th:nth-child(2),
+.score-table th:nth-child(3) {
+    text-align: right;
+}
+
+.score-table tr:last-child {
+    font-weight: bold;
+}
+
 }
 .section {
     margin-bottom: 30px;
