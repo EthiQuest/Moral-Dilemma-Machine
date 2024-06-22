@@ -427,12 +427,12 @@ function makeChoice(choiceIndex) {
 
     psychopathicScore += chosenOption.psychopathic;
 
-    for (const [metric, score] of Object.entries(leanScores)) {
-        leanScores[metric] += chosenOption[metric] || 0;
+    for (const [leanScore, score] of Object.entries(chosenOption.scores)) {
+        leanScores[leanScore] += score;
     }
 
-    for (const [metric, score] of Object.entries(teamScores)) {
-        teamScores[metric] += chosenOption[metric] || 0;
+    for (const [teamScore, score] of Object.entries(chosenOption.scores)) {
+        teamScores[teamScore] += score;
     }
 
     currentDilemma++;
