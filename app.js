@@ -312,22 +312,6 @@ const dilemmaPool = [
             }
         ]
     },
-    {
-        scenario: "You're offered a promotion that would require you to relocate, disrupting your family's life. How do you proceed?",
-        options: [
-            {
-                text: "Accept the promotion without consulting your family.",
-                scores: { Trustworthiness: -1, Respect: -3, Responsibility: 0, Fairness: -2, Caring: -3, Citizenship: -1 },
-                psychopathic: 2
-            },
-            {
-                text: "Discuss with your family and make a collective decision.",
-                scores: { Trustworthiness: 2, Respect: 3, Responsibility: 2, Fairness: 2, Caring: 3, Citizenship: 1 },
-                psychopathic: 0
-            },
-            {
-                text: "Decline the promotion to maintain family stability.",
-                scores: { Trustworthiness: 1, Respect: 2, Responsibility: 1, Fairness:
     // Add more dilemmas here...
 ];
 
