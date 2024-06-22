@@ -340,8 +340,7 @@ const dilemmaPool = [
                 conflictResolution: -2,
                 collaborativeCulture: -2,
                 employeeEmpowerment: -3  },
-                psychopathic: 1
-                
+                psychopathic: 1           
             },
             {
                 text: "Conduct a team workshop to identify bottlenecks and improve processes.",
