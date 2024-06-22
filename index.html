@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4285f4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Leadership Decision Assessment</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        button, input[type="number"] {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #result, #progress {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #hrDetails, #hrAccess {
+            display: none;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        #hrCodeInput {
+            width: calc(100% - 22px);
+            margin-right: 10px;
+        }
+        #radarChart {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leadership Decision Assessment</h1>
+    <div id="setup">
+        <p>How many scenarios would you like to face?</p>
+        <input type="number" id="dilemmaCount" min="1" max="50" value="20">
+        <button onclick="startAssessment()">Start</button>
+    </div>
+    <div id="game" style="display:none;">
+        <div id="progress"></div>
+        <div id="scenario"></div>
+        <div id="options"></div>
+    </div>
+    <div id="result"></div>
+    <canvas id="radarChart"></canvas>
+    <div id="hrAccess" style="display:none;">
+        <input type="password" id="hrCodeInput" placeholder="HR Code">
+        <button onclick="checkHRCode()">Access HR View</button>
+    </div>
+    <div id="hrDetails"></div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
