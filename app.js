@@ -61,12 +61,12 @@ function presentDilemma() {
         return;
     }
 
-    document.getElementById('progress').innerHTML = `Scenario ${currentDilemma + 1} of ${totalDilemmas}`;
+    document.getElementById('progress').innerHTML = `<i class="fas fa-tasks"></i> Scenario ${currentDilemma + 1} of ${totalDilemmas}`;
 
     const dilemma = dilemmaPool[currentDilemma];
-    document.getElementById('scenario').innerHTML = `<p>${dilemma.scenario}</p>`;
+    document.getElementById('scenario').innerHTML = `<p><i class="fas fa-exclamation-circle"></i> ${dilemma.scenario}</p>`;
     const optionsHtml = dilemma.options.map((option, index) => 
-        `<button ontouchstart="this.classList.add('active')" ontouchend="this.classList.remove('active');makeChoice(${index})">${option.text}</button>`
+        `<button ontouchstart="this.classList.add('active')" ontouchend="this.classList.remove('active');makeChoice(${index})" class="icon-text"><i class="fas fa-check-circle"></i> ${option.text}</button>`
     ).join('');
     document.getElementById('options').innerHTML = optionsHtml;
 }
@@ -89,7 +89,7 @@ function makeChoice(choiceIndex) {
 
 function showResults() {
     console.log("Showing results");
-    let resultHtml = "<h2>Your Leadership Style Assessment:</h2>";
+    let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment:</h2>";
     let totalScore = 0;
     let chartData = [];
     
@@ -99,7 +99,7 @@ function showResults() {
     for (const [pillar, score] of Object.entries(pillars)) {
         const normalizedScore = ((score - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
         const percentage = normalizedScore.toFixed(2);
-        resultHtml += `<p>${pillar}: ${score} (${percentage}%)</p>`;
+        resultHtml += `<p><i class="fas fa-star"></i> ${pillar}: ${score} (${percentage}%)</p>`;
         totalScore += score;
         chartData.push(parseFloat(percentage));
     }
@@ -118,14 +118,14 @@ function showResults() {
         overallAssessment = "Your decisions consistently demonstrate a disregard for ethical leadership principles. This approach carries significant risks and is not recommended.";
     }
 
-    resultHtml += `<p><strong>Overall Score:</strong> ${totalScore} (${overallPercentage.toFixed(2)}%)</p>`;
-    resultHtml += `<p><strong>Overall Assessment:</strong> ${overallAssessment}</p>`;
+    resultHtml += `<p><strong><i class="fas fa-poll"></i> Overall Score:</strong> ${totalScore} (${overallPercentage.toFixed(2)}%)</p>`;
+    resultHtml += `<p><strong><i class="fas fa-comment-alt"></i> Overall Assessment:</strong> ${overallAssessment}</p>`;
 
     let psychopathicPercentage = (psychopathicScore / (totalDilemmas * 2)) * 100;
     if (psychopathicPercentage > 70) {
-        resultHtml += "<p><strong>Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
+        resultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
     } else if (psychopathicPercentage > 40) {
-        resultHtml += "<p><strong>Note:</strong> Your decisions sometimes reflect a lack of empathy or consideration for others, which could impact your effectiveness as a leader.</p>";
+        resultHtml += "<p><strong><i class='fas fa-info-circle'></i> Note:</strong> Your decisions sometimes reflect a lack of empathy or consideration for others, which could impact your effectiveness as a leader.</p>";
     }
 
     document.getElementById('result').innerHTML = resultHtml;
@@ -181,20 +181,20 @@ function checkHRCode() {
 }
 
 function showHRDetails() {
-    let hrResultHtml = "<h2>HR Detailed Assessment Results</h2>";
+    let hrResultHtml = "<h2><i class='fas fa-user-shield'></i> HR Detailed Assessment Results</h2>";
     
     let psychopathicPercentage = (psychopathicScore / (totalDilemmas * 2)) * 100;
-    hrResultHtml += `<p><strong>Psychopathic Tendency Score:</strong> ${psychopathicScore} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
+    hrResultHtml += `<p><strong><i class='fas fa-brain'></i> Psychopathic Tendency Score:</strong> ${psychopathicScore} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
     
     if (psychopathicPercentage > 70) {
-        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses show a high level of psychopathic tendencies. Their decision-making demonstrates significant lack of empathy, manipulativeness, and disregard for others' wellbeing. This individual may pose serious risks in leadership positions.</p>";
+        hrResultHtml += "<p><strong><i class='fas fa-exclamation-circle'></i> Assessment:</strong> The participant's responses show a high level of psychopathic tendencies. Their decision-making demonstrates significant lack of empathy, manipulativeness, and disregard for others' wellbeing. This individual may pose serious risks in leadership positions.</p>";
     } else if (psychopathicPercentage > 40) {
-        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses indicate moderate psychopathic tendencies. Their decisions often lack empathy and consideration for others. This could lead to problematic leadership behaviors and should be addressed.</p>";
+        hrResultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Assessment:</strong> The participant's responses indicate moderate psychopathic tendencies. Their decisions often lack empathy and consideration for others. This could lead to problematic leadership behaviors and should be addressed.</p>";
     } else {
-        hrResultHtml += "<p><strong>Assessment:</strong> The participant's responses do not indicate significant psychopathic tendencies. Their decision-making generally shows consideration for others and ethical principles.</p>";
+        hrResultHtml += "<p><strong><i class='fas fa-check-circle'></i> Assessment:</strong> The participant's responses do not indicate significant psychopathic tendencies. Their decision-making generally shows consideration for others and ethical principles.</p>";
     }
 
-    hrResultHtml += "<p><strong>Recommendation:</strong> ";
+    hrResultHtml += "<p><strong><i class='fas fa-clipboard-list'></i> Recommendation:</strong> ";
     if (psychopathicPercentage > 60) {
         hrResultHtml += "Consider additional psychological evaluation before placing this individual in leadership roles. Close monitoring and mentoring may be necessary if already in a leadership position.</p>";
     } else if (psychopathicPercentage > 30) {
