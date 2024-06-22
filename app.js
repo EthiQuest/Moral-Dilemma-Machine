@@ -9,6 +9,21 @@ const pillars = {
     "Caring": 0,
     "Citizenship": 0
 };
+
+const leanScores = {
+    valueStreamOptimization: 0,
+    continuousImprovement: 0,
+    wasteReduction: 0,
+    flowEfficiency: 0
+};
+
+const teamScores = {
+    psychologicalSafety: 0,
+    conflictResolution: 0,
+    collaborativeCulture: 0,
+    employeeEmpowerment: 0
+};
+
 let psychopathicScore = 0;
 
 const dilemmaPool = [
