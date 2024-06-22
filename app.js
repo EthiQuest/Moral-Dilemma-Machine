@@ -1,6 +1,9 @@
 const HR_SECRET_CODE = 'HR1234';
 let currentDilemma = 0;
 let totalDilemmas = 20;
+let currentFlowQuestion = 0;
+let flowOptimizationScore = 0;
+
 const scores = {
     pillars: {
         trustworthiness: 0,
@@ -24,6 +27,49 @@ const scores = {
     },
     psychopathic: 0
 };
+
+const flowOptimizationQuestions = [
+    {
+        question: "How do you typically handle bottlenecks in your workflow?",
+        options: [
+            { text: "Increase resources at the bottleneck", score: 2 },
+            { text: "Redesign the process to eliminate the bottleneck", score: 3 },
+            { text: "Ignore it and focus on other areas", score: 0 }
+        ]
+    },
+    {
+        question: "What's your approach to reducing work in progress (WIP)?",
+        options: [
+            { text: "Implement a strict WIP limit", score: 3 },
+            { text: "Gradually reduce WIP over time", score: 2 },
+            { text: "Allow WIP to fluctuate based on demand", score: 1 }
+        ]
+    },
+    {
+        question: "How do you measure and improve cycle time?",
+        options: [
+            { text: "Regularly track and analyze cycle time metrics", score: 3 },
+            { text: "Occasionally review cycle time when issues arise", score: 1 },
+            { text: "Focus on output rather than cycle time", score: 0 }
+        ]
+    },
+    {
+        question: "What's your strategy for managing variability in your processes?",
+        options: [
+            { text: "Standardize processes to reduce variability", score: 3 },
+            { text: "Buffer with inventory or capacity", score: 1 },
+            { text: "Accept variability as inevitable", score: 0 }
+        ]
+    },
+    {
+        question: "How do you approach continuous flow in your operations?",
+        options: [
+            { text: "Strive for single-piece flow wherever possible", score: 3 },
+            { text: "Use small batch sizes", score: 2 },
+            { text: "Prioritize large batch production for efficiency", score: 0 }
+        ]
+    }
+];
 
 const dilemmaPool = [
     {
@@ -393,6 +439,11 @@ function createSectionHtml(title, scoreObj, chartId) {
         const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
         sectionHtml += `<p><strong>${metric}:</strong> ${score} (${normalizedScore.toFixed(2)}%)</p>`;
         totalScore += score;
+
+// Add drill-down button for Flow Optimization
+        if (metric === 'flowEfficiency' && title === 'Lean Leadership') {
+            sectionHtml += `<tr><td colspan="3"><button onclick="startFlowOptimizationDrillDown()">Drill Down into Flow Optimization</button></td></tr>`;
+        }
     }
 
     const overallPercentage = ((totalScore + maxPossibleScore / 2) / maxPossibleScore) * 100;
@@ -463,6 +514,59 @@ function checkHRCode() {
         alert("Incorrect HR code. Access denied.");
     }
 }
+
+function startFlowOptimizationDrillDown() {
+    currentFlowQuestion = 0;
+    flowOptimizationScore = 0;
+    presentFlowOptimizationQuestion();
+}
+
+function presentFlowOptimizationQuestion() {
+    if (currentFlowQuestion >= flowOptimizationQuestions.length) {
+        showFlowOptimizationResults();
+        return;
+    }
+
+    const question = flowOptimizationQuestions[currentFlowQuestion];
+    let questionHtml = `<h3>Flow Optimization Question ${currentFlowQuestion + 1}</h3>`;
+    questionHtml += `<p>${question.question}</p>`;
+    questionHtml += question.options.map((option, index) => 
+        `<button onclick="answerFlowOptimizationQuestion(${index})">${option.text}</button>`
+    ).join('');
+
+    document.getElementById('result').innerHTML = questionHtml;
+}
+
+function answerFlowOptimizationQuestion(optionIndex) {
+    const question = flowOptimizationQuestions[currentFlowQuestion];
+    flowOptimizationScore += question.options[optionIndex].score;
+    currentFlowQuestion++;
+    presentFlowOptimizationQuestion();
+}
+
+function showFlowOptimizationResults() {
+    const maxScore = flowOptimizationQuestions.length * 3;
+    const percentage = (flowOptimizationScore / maxScore) * 100;
+
+    let resultHtml = "<h3>Flow Optimization Assessment Results</h3>";
+    resultHtml += `<p>Your Flow Optimization Score: ${flowOptimizationScore} out of ${maxScore} (${percentage.toFixed(2)}%)</p>`;
+    
+    if (percentage > 80) {
+        resultHtml += "<p>Excellent! You have a strong grasp of flow optimization principles.</p>";
+    } else if (percentage > 60) {
+        resultHtml += "<p>Good job! You have a solid understanding of flow optimization, with some room for improvement.</p>";
+    } else if (percentage > 40) {
+        resultHtml += "<p>You have a basic understanding of flow optimization. Consider focusing on improving this area.</p>";
+    } else {
+        resultHtml += "<p>There's significant room for improvement in your understanding of flow optimization. Consider additional training or resources in this area.</p>";
+    }
+
+    resultHtml += "<button onclick='showResults()'>Back to Overall Results</button>";
+
+    document.getElementById('result').innerHTML = resultHtml;
+}
+
+
 
 function showHRDetails() {
     let hrResultHtml = "<h2><i class='fas fa-user-shield'></i> HR Detailed Assessment Results</h2>";
