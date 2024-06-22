@@ -9,14 +9,15 @@
     <title>Leadership Decision Assessment</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192x192.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            max-width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
             box-sizing: border-box;
         }
         button, input[type="number"] {
@@ -53,14 +54,22 @@
         button:active, button.active {
             background-color: #3367d6;
         }
+        .icon-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-text i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>Leadership Decision Assessment</h1>
+    <h1 class="icon-text"><i class="fas fa-balance-scale"></i>Leadership Decision Assessment</h1>
     <div id="setup">
-        <p>How many scenarios would you like to face?</p>
+        <p class="icon-text"><i class="fas fa-question-circle"></i>How many scenarios would you like to face?</p>
         <input type="number" id="dilemmaCount" min="1" max="50" value="20">
-        <button onclick="startAssessment()">Start</button>
+        <button onclick="startAssessment()" class="icon-text"><i class="fas fa-play"></i>Start</button>
     </div>
     <div id="game" style="display:none;">
         <div id="progress"></div>
@@ -71,7 +80,7 @@
     <canvas id="radarChart"></canvas>
     <div id="hrAccess" style="display:none;">
         <input type="password" id="hrCodeInput" placeholder="HR Code">
-        <button onclick="checkHRCode()">Access HR View</button>
+        <button onclick="checkHRCode()" class="icon-text"><i class="fas fa-lock"></i>Access HR View</button>
     </div>
     <div id="hrDetails"></div>
 
