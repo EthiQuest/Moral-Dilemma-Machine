@@ -468,15 +468,17 @@ function makeChoice(choiceIndex) {
     for (const [pillar, score] of Object.entries(chosenOption.scores)) {
         pillars[pillar] += score;
     }
+
     psychopathicScore += chosenOption.psychopathic;
-    leanScores.valueStreamOptimization += chosenOption.valueStreamOptimization || 0;
-    leanScores.continuousImprovement += chosenOption.continuousImprovement || 0;
-    leanScores.wasteReduction += chosenOption.wasteReduction || 0;
-    leanScores.flowEfficiency += chosenOption.flowEfficiency || 0;
-    teamScores.psychologicalSafety += chosenOption.psychologicalSafety || 0;
-    teamScores.conflictResolution += chosenOption.conflictResolution || 0;
-    teamScores.collaborativeCulture += chosenOption.collaborativeCulture || 0;
-    teamScores.employeeEmpowerment += chosenOption.employeeEmpowerment || 0;
+
+    for (const [metric, score] of Object.entries(leanScores)) {
+        leanScores[metric] += chosenOption[metric] || 0;
+    }
+
+    for (const [metric, score] of Object.entries(teamScores)) {
+        teamScores[metric] += chosenOption[metric] || 0;
+    }
+
     currentDilemma++;
     
     if (currentDilemma >= totalDilemmas) {
