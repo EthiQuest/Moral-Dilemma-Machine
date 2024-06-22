@@ -430,25 +430,39 @@ function showResults() {
     createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
 }
 
+
+
 function createSectionHtml(title, scoreObj, chartId) {
-    let sectionHtml = `<h3>${title}</h3>`;
+    let sectionHtml = `<div class='section'><h3>${title}</h3>`;
     let totalScore = 0;
     const maxPossibleScore = totalDilemmas * 3 * Object.keys(scoreObj).length;
 
+    sectionHtml += "<table class='score-table'>";
+    sectionHtml += "<thead><tr><th>Metric</th><th>Score</th><th>Percentage</th></tr></thead><tbody>";
+
     for (const [metric, score] of Object.entries(scoreObj)) {
         const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
-        sectionHtml += `<p><strong>${metric}:</strong> ${score} (${normalizedScore.toFixed(2)}%)</p>`;
+        sectionHtml += `<tr>
+            <td>${capitalizeFirstLetter(metric)}</td>
+            <td>${score}</td>
+            <td>${normalizedScore.toFixed(2)}%</td>
+        </tr>`;
         totalScore += score;
-
-// Add drill-down button for Flow Optimization
+        
+        // Add drill-down button for Flow Optimization
         if (metric === 'flowEfficiency' && title === 'Lean Leadership') {
             sectionHtml += `<tr><td colspan="3"><button onclick="startFlowOptimizationDrillDown()">Drill Down into Flow Optimization</button></td></tr>`;
         }
     }
 
     const overallPercentage = ((totalScore + maxPossibleScore / 2) / maxPossibleScore) * 100;
-    sectionHtml += `<p><strong>Overall ${title} Score:</strong> ${totalScore} out of ${maxPossibleScore} (${overallPercentage.toFixed(2)}%)</p>`;
-    sectionHtml += `<canvas id="${chartId}" width="400" height="400"></canvas>`;
+    sectionHtml += `</tbody><tfoot><tr>
+        <th>Overall ${title} Score</th>
+        <th>${totalScore} out of ${maxPossibleScore}</th>
+        <th>${overallPercentage.toFixed(2)}%</th>
+    </tr></tfoot>`;
+    sectionHtml += "</table>";
+    sectionHtml += `<div class='chart-container'><canvas id="${chartId}"></canvas></div></div>`;
 
     return sectionHtml;
 }
