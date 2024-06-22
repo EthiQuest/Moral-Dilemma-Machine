@@ -431,17 +431,18 @@ function showResults() {
 }
 
 
-
 function createSectionHtml(title, scoreObj, chartId) {
     let sectionHtml = `<div class='section'><h3>${title}</h3>`;
     let totalScore = 0;
     const maxPossibleScore = totalDilemmas * 3 * Object.keys(scoreObj).length;
+    const minPossibleScore = totalDilemmas * -3 * Object.keys(scoreObj).length;
 
     sectionHtml += "<table class='score-table'>";
     sectionHtml += "<thead><tr><th>Metric</th><th>Score</th><th>Percentage</th></tr></thead><tbody>";
 
     for (const [metric, score] of Object.entries(scoreObj)) {
-        const normalizedScore = ((score + totalDilemmas * 3) / (totalDilemmas * 6)) * 100;
+        // Normalize the score to a 0-100 range
+        const normalizedScore = ((score - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
         sectionHtml += `<tr>
             <td>${capitalizeFirstLetter(metric)}</td>
             <td>${score}</td>
@@ -455,7 +456,8 @@ function createSectionHtml(title, scoreObj, chartId) {
         }
     }
 
-    const overallPercentage = ((totalScore + maxPossibleScore / 2) / maxPossibleScore) * 100;
+    // Calculate overall percentage
+    const overallPercentage = ((totalScore - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
     sectionHtml += `</tbody><tfoot><tr>
         <th>Overall ${title} Score</th>
         <th>${totalScore} out of ${maxPossibleScore}</th>
@@ -466,6 +468,7 @@ function createSectionHtml(title, scoreObj, chartId) {
 
     return sectionHtml;
 }
+
 
 function createRadarChart(canvasId, labels, data, title) {
     const ctx = document.getElementById(canvasId).getContext('2d');
