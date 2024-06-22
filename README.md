@@ -40,8 +40,8 @@ There is a hidden feature for HR professionals to access a more detailed assessm
 Contributions to improve the Moral Dilemma Machine are welcome. Please feel free to fork the repository and submit pull requests.
 
 ## License
-[Include your chosen license information here]
+MIT License 
 
 ## Contact
-[Your Name or GitHub username]
-[Optional: Your email or other contact information]
+Søren Porskrog 
+porskrog@flow.camp 
