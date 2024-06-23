@@ -228,9 +228,8 @@ function showResults() {
     console.log("Showing results");
     let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
 
-    // Decisions made and their impact on a chart
-    resultHtml += "<h3>Impact of Your Decisions on Six Pillars</h3>";
-    resultHtml += "<div class='chart-container'><canvas id='impactChart'></canvas></div>";
+    // Impact on the 6 pillars Section
+    resultHtml += createSectionHtml("Impact of Your Decisions on Six Pillars", null, 'impactChart');
 
     // Ethical Leadership Section
     resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
