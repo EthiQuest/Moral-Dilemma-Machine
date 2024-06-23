@@ -1,4 +1,4 @@
-  <style>
+<style>
 
 input[type="number"] {
     width: calc(100% - 20px); /* Subtracting padding */
@@ -112,6 +112,11 @@ input[type="number"] {
     margin: 20px auto;
 }
 
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    height: 400px;
+}
 
-
-    </style>
+</style>
