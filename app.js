@@ -228,13 +228,9 @@ function showResults() {
     console.log("Showing results");
     let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
 
-
+    // Decisions made and their impact on a chart
     resultHtml += "<h3>Impact of Your Decisions on Six Pillars</h3>";
     resultHtml += "<div class='chart-container'><canvas id='impactChart'></canvas></div>";
-
-    document.getElementById('result').innerHTML = resultHtml;
-
-    // ... existing code to create other charts ...
 
     // Ethical Leadership Section
     resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
@@ -260,6 +256,10 @@ function showResults() {
     document.getElementById('result').innerHTML = resultHtml;
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
+
+
+    console.log('Answer Impacts:', answerImpacts);
+    console.log('Pillars:', Object.keys(scores.pillars));
 
     createImpactChart('impactChart', answerImpacts, Object.keys(scores.pillars));
     createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
