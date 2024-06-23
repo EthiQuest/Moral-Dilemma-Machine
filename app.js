@@ -470,7 +470,7 @@ function createImpactChart() {
 }
 
 //
-// function 
+// function showResults 
 // 
 
 function showResults() {
@@ -513,6 +513,8 @@ function showResults() {
     createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
     createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
     createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
+
+    createImpactChart();
 }
 
 
