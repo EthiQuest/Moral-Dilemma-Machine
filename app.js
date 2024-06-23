@@ -372,9 +372,32 @@ function presentDilemma() {
     document.getElementById('options').innerHTML = optionsHtml;
 }
 
+//
+// function makeChoice ...........
+//
+
 function makeChoice(choiceIndex) {
     const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
     const chosenOption = dilemma.options[choiceIndex];
+    
+    if (!scores.answerImpacts) {
+        scores.answerImpacts = [];
+    }
+    
+    let impact = {
+        question: dilemma.scenario,
+        answer: chosenOption.text,
+        impacts: {}
+    };
+    
+    for (const [pillar, score] of Object.entries(chosenOption.scores.pillars)) {
+        scores.pillars[pillar] += score;
+        impact.impacts[pillar] = score;
+    }
+    
+    scores.answerImpacts.push(impact);
+    
+    // ... rest of the function ...
     
     for (const category in chosenOption.scores) {
         if (category === 'psychopathic') {
@@ -395,10 +418,72 @@ function makeChoice(choiceIndex) {
     }
 }
 
+//
+// function createImpactChart .....
+//
+
+function createImpactChart() {
+    const ctx = document.getElementById('impactChart').getContext('2d');
+    const pillars = Object.keys(scores.pillars);
+    const datasets = scores.answerImpacts.map((impact, index) => ({
+        label: `Q${index + 1}`,
+        data: pillars.map(pillar => impact.impacts[pillar] || 0),
+        backgroundColor: impact.impacts[pillar] > 0 ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)'
+    }));
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: pillars,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return `Question ${context[0].datasetIndex + 1}`;
+                        },
+                        label: function(context) {
+                            const impact = scores.answerImpacts[context.datasetIndex];
+                            return [
+                                `Pillar: ${context.label}`,
+                                `Impact: ${context.raw}`,
+                                `Question: ${impact.question}`,
+                                `Answer: ${impact.answer}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+//
+// function 
+// 
 
 function showResults() {
     console.log("Showing results");
     let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
+
+
+    resultHtml += "<h3>Impact of Your Decisions on Six Pillars</h3>";
+    resultHtml += "<div class='chart-container'><canvas id='impactChart'></canvas></div>";
+
+    document.getElementById('result').innerHTML = resultHtml;
+
+    // ... existing code to create other charts ...
 
     // Ethical Leadership Section
     resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
