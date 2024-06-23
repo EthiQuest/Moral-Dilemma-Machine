@@ -1,6 +1,9 @@
 import dilemmaPool from './dilemmas.js';
 
-const HR_SECRET_CODE = 'HR1234';
+(function() {
+    // All your variables and functions go here
+
+    const HR_SECRET_CODE = 'HR1234';
 let currentDilemma = 0;
 let totalDilemmas = 20;
 let currentFlowQuestion = 0;
@@ -73,8 +76,11 @@ const flowOptimizationQuestions = [
     }
 ];
 
+//
+// functions startAssessment ...
+//
 
-function startAssessment() {
+  function startAssessment() {
     totalDilemmas = parseInt(document.getElementById('dilemmaCount').value);
     if (isNaN(totalDilemmas) || totalDilemmas < 1 || totalDilemmas > dilemmaPool.length) {
         alert(`Please enter a valid number of scenarios (1-${dilemmaPool.length}).`);
@@ -87,6 +93,10 @@ function startAssessment() {
     presentDilemma();
 }
 
+//
+// function resetScores ...
+//
+
 function resetScores() {
     for (const category in scores) {
         if (typeof scores[category] === 'object') {
@@ -98,6 +108,10 @@ function resetScores() {
         }
     }
 }
+
+//
+// function presentDilemma ...
+//
 
 function presentDilemma() {
     if (currentDilemma >= totalDilemmas) {
@@ -260,6 +274,9 @@ function showResults() {
     createImpactChart();
 }
 
+//
+// function createSectionHtml
+//
 
 function createSectionHtml(title, scoreObj, chartId) {
     let sectionHtml = `<div class='section'><h3>${title}</h3>`;
@@ -302,6 +319,9 @@ function createSectionHtml(title, scoreObj, chartId) {
     return sectionHtml;
 }
 
+//
+// function createRadarChart ...
+//
 
 function createRadarChart(canvasId, labels, data, title) {
     const ctx = document.getElementById(canvasId).getContext('2d');
@@ -352,6 +372,10 @@ function createRadarChart(canvasId, labels, data, title) {
     });
 }
 
+//
+// function capitalizeFirstLetter ...
+//
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -365,11 +389,19 @@ function checkHRCode() {
     }
 }
 
+//
+// function startFlowOptimizationDrillDown 
+//
+
 function startFlowOptimizationDrillDown() {
     currentFlowQuestion = 0;
     flowOptimizationScore = 0;
     presentFlowOptimizationQuestion();
 }
+
+//
+// function presentFlowOptimizationQuestion
+//
 
 function presentFlowOptimizationQuestion() {
     if (currentFlowQuestion >= flowOptimizationQuestions.length) {
@@ -387,12 +419,20 @@ function presentFlowOptimizationQuestion() {
     document.getElementById('result').innerHTML = questionHtml;
 }
 
+//
+// function answerFlowOptimizationQuestion
+//
+
 function answerFlowOptimizationQuestion(optionIndex) {
     const question = flowOptimizationQuestions[currentFlowQuestion];
     flowOptimizationScore += question.options[optionIndex].score;
     currentFlowQuestion++;
     presentFlowOptimizationQuestion();
 }
+
+//
+// function showFlowOptimizationResults
+//
 
 function showFlowOptimizationResults() {
     const maxScore = flowOptimizationQuestions.length * 3;
@@ -416,7 +456,9 @@ function showFlowOptimizationResults() {
     document.getElementById('result').innerHTML = resultHtml;
 }
 
-
+//
+// function showHRDetails ...
+//
 
 function showHRDetails() {
     let hrResultHtml = "<h2><i class='fas fa-user-shield'></i> HR Detailed Assessment Results</h2>";
@@ -444,3 +486,26 @@ function showHRDetails() {
     document.getElementById('hrDetails').innerHTML = hrResultHtml;
     document.getElementById('hrDetails').style.display = 'block';
 }
+
+//
+// Make necessary functions and variables available globally
+//
+
+    window.startAssessment = startAssessment;
+    window.checkHRCode = checkHRCode;
+    window.makeChoice = makeChoice;  // If this is called from HTML
+    
+    // If you have any initialization code, put it here
+    // For example, if you want to set up event listeners when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any initialization code goes here
+    });
+})();
+
+
+
+
+
+
+
+
