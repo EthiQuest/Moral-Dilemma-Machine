@@ -179,13 +179,12 @@ function makeChoice(choiceIndex) {
 // function createImpactChart .....
 //
 
-function createImpactChart() {
-    const ctx = document.getElementById('impactChart').getContext('2d');
-    const pillars = Object.keys(scores.pillars);
-    const datasets = scores.answerImpacts.map((impact, index) => ({
+function createImpactChart(canvasId, impacts, pillars) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const datasets = impacts.map((impact, index) => ({
         label: `Q${index + 1}`,
         data: pillars.map(pillar => impact.impacts[pillar] || 0),
-        backgroundColor: impact.impacts[pillar] > 0 ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)'
+        backgroundColor: (context) => impact.impacts[pillars[context.dataIndex]] > 0 ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)'
     }));
 
     new Chart(ctx, {
@@ -197,12 +196,8 @@ function createImpactChart() {
         options: {
             responsive: true,
             scales: {
-                x: {
-                    stacked: true,
-                },
-                y: {
-                    stacked: true
-                }
+                x: { stacked: true },
+                y: { stacked: true }
             },
             plugins: {
                 tooltip: {
@@ -211,7 +206,7 @@ function createImpactChart() {
                             return `Question ${context[0].datasetIndex + 1}`;
                         },
                         label: function(context) {
-                            const impact = scores.answerImpacts[context.datasetIndex];
+                            const impact = impacts[context.datasetIndex];
                             return [
                                 `Pillar: ${context.label}`,
                                 `Impact: ${context.raw}`,
