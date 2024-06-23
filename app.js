@@ -252,11 +252,9 @@ function showResults() {
     } else {
         resultHtml += "<p><strong><i class='fas fa-check-circle'></i> Note:</strong> Your decisions generally reflect empathy and consideration for others, which is positive for leadership roles.</p>";
     }
-
     document.getElementById('result').innerHTML = resultHtml;
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
-
 
     console.log('Answer Impacts:', answerImpacts);
     console.log('Pillars:', Object.keys(scores.pillars));
