@@ -32,11 +32,21 @@
         <div id="scenario"></div>
         <div id="options"></div>
     </div>
-    <div id="result"></div>
-    <canvas id="impactChart"></canvas>
-    <canvas id="radarChart"></canvas>
-    <canvas id="leanRadarChart"></canvas>
-    <canvas id="teamRadarChart"></canvas>
+
+<div id="result">
+    <div class="chart-container">
+        <canvas id="radarChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="leanRadarChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="teamRadarChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="impactChart"></canvas>
+    </div>
+</div>
     <div id="hrAccess" style="display:none;">
         <input type="password" id="hrCodeInput" placeholder="HR Code">
         <button onclick="checkHRCode()" class="icon-text"><i class="fas fa-lock"></i>Access HR View</button>
