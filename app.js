@@ -154,8 +154,6 @@ function makeChoice(choiceIndex) {
     
     scores.answerImpacts.push(impact);
     
-    // ... rest of the function ...
-    
     for (const category in chosenOption.scores) {
         if (category === 'psychopathic') {
             scores[category] += chosenOption.scores[category];
@@ -262,11 +260,10 @@ function showResults() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
+    createImpactChart('impactChart', answerImpacts, Object.keys(scores.pillars));
     createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
     createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
     createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
-
-    createImpactChart();
 }
 
 //
@@ -374,6 +371,10 @@ function createRadarChart(canvasId, labels, data, title) {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+//
+// function checkHRCode ...
+//
 
 function checkHRCode() {
     const inputCode = document.getElementById('hrCodeInput').value;
