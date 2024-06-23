@@ -1,3 +1,5 @@
+import dilemmaPool from './dilemmas.js';
+
 const HR_SECRET_CODE = 'HR1234';
 let currentDilemma = 0;
 let totalDilemmas = 20;
