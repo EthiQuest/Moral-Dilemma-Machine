@@ -21,12 +21,15 @@
     <script type="module" src="app.js"></script>
 </head>
 
+
+
+
 <body>
     <h1 class="icon-text"><i class="fas fa-balance-scale"></i>Leadership Decision Assessment</h1>
     <div id="setup">
         <p class="icon-text"><i class="fas fa-question-circle"></i>How many scenarios would you like to face?</p>
-        <input type="number" id="dilemmaCount" min="1" max="50" value="20">
-        <button onclick="startAssessment()" class="icon-text"><i class="fas fa-play"></i>Start</button>
+        <input type="number" id="dilemmaCount" min="1" max="50" value="20" aria-label="Number of scenarios">
+        <button id="startButton" class="icon-text" aria-label="Start Assessment"><i class="fas fa-play"></i>Start</button>
     </div>
     <div id="game" style="display:none;">
         <div id="progress"></div>
@@ -35,25 +38,30 @@
     </div>
 
     <div id="result"></div>
-    <div class="chart-container">
-        <canvas id="radarChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="leanRadarChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="teamRadarChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="impactChart"></canvas>
+    <div id="chartContainers" style="display:none;">
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="leanRadarChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="teamRadarChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="impactChart"></canvas>
+        </div>
     </div>
 
     <div id="hrAccess" style="display:none;">
-        <input type="password" id="hrCodeInput" placeholder="HR Code">
-        <button onclick="checkHRCode()" class="icon-text"><i class="fas fa-lock"></i>Access HR View</button>
+        <input type="password" id="hrCodeInput" placeholder="HR Code" aria-label="HR Code">
+        <button id="hrAccessButton" class="icon-text" aria-label="Access HR View"><i class="fas fa-lock"></i>Access HR View</button>
     </div>
     <div id="hrDetails"></div>
 
+    <div id="loading" style="display:none;">Loading...</div>
+
+    <script type="module" src="app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
