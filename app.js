@@ -28,7 +28,7 @@ const scores = {
         collaborativeCulture: 0,
         employeeEmpowerment: 0
     },
-    psychopathic: 0
+    psychopathic: 0,
     answerImpacts: []
 };
 
