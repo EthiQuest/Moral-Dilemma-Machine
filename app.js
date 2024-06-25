@@ -483,17 +483,32 @@ function showHRDetails() {
 // Make necessary functions and variables available globally
 //
 
-    window.startAssessment = startAssessment;
-    window.checkHRCode = checkHRCode;
-    window.makeChoice = makeChoice;  // If this is called from HTML
-    window.startFlowOptimizationDrillDown = startFlowOptimizationDrillDown;
-    window.answerFlowOptimizationQuestion = answerFlowOptimizationQuestion;
+window.startAssessment = startAssessment;
+window.checkHRCode = checkHRCode;
+window.makeChoice = makeChoice;  // If this is called from HTML
+window.startFlowOptimizationDrillDown = startFlowOptimizationDrillDown;
+window.answerFlowOptimizationQuestion = answerFlowOptimizationQuestion;
 
-    // If you have any initialization code, put it here
-    // For example, if you want to set up event listeners when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        // Any initialization code goes here
+// If you have any initialization code, put it here
+// For example, if you want to set up event listeners when the page loads
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for buttons
+    document.getElementById('startButton').addEventListener('click', startAssessment);
+    document.getElementById('hrAccessButton').addEventListener('click', checkHRCode);
+
+    // Add event delegation for dynamically created buttons
+    document.getElementById('result').addEventListener('click', function(event) {
+        if (event.target.matches('button[onclick^="startFlowOptimizationDrillDown"]')) {
+            startFlowOptimizationDrillDown();
+        } else if (event.target.matches('button[onclick^="answerFlowOptimizationQuestion"]')) {
+            const index = parseInt(event.target.getAttribute('onclick').match(/\d+/)[0]);
+            answerFlowOptimizationQuestion(index);
+        }
     });
+
+    // Any other initialization code can go here
+});
 
 
 
