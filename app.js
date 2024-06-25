@@ -293,7 +293,7 @@ function createSectionHtml(title, scoreObj, chartId) {
         
             // Add drill-down button for Flow Optimization
             if (metric === 'flowEfficiency' && title === 'Lean Leadership') {
-                sectionHtml += `<tr><td colspan="3"><button onclick="startFlowOptimizationDrillDown()">Drill Down into Flow Optimization</button></td></tr>`;
+                sectionHtml += `<tr><td colspan="3"><button class="flow-optimization-drill-down">Drill Down into Flow Optimization</button></td></tr>`;   
             }
         }
     }
@@ -446,8 +446,7 @@ function showFlowOptimizationResults() {
         resultHtml += "<p>There's significant room for improvement in your understanding of flow optimization. Consider additional training or resources in this area.</p>";
     }
 
-    resultHtml += "<button onclick='showResults()'>Back to Overall Results</button>";
-
+    resultHtml += "<button class='back-to-results'>Back to Overall Results</button>";
     document.getElementById('result').innerHTML = resultHtml;
 }
 
