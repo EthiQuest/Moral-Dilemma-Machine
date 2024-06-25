@@ -29,6 +29,7 @@ const scores = {
         employeeEmpowerment: 0
     },
     psychopathic: 0
+    answerImpacts: []
 };
 
 const flowOptimizationQuestions = [
