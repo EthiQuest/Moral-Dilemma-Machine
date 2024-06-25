@@ -276,26 +276,26 @@ function createSectionHtml(title, scoreObj, chartId) {
     sectionHtml += "<thead><tr><th>Metric</th><th>Score</th><th>Percentage</th></tr></thead><tbody>";
 
 
-if (scoreObj) {
-    for (const [metric, score] of Object.entries(scoreObj)) {
-        // For individual metrics, normalize based on the possible range for a single metric
-        const singleMetricMax = totalDilemmas * 3;
-        const singleMetricMin = totalDilemmas * -3;
-        const normalizedScore = ((score - singleMetricMin) / (singleMetricMax - singleMetricMin)) * 100;
+    if (scoreObj) {
+        for (const [metric, score] of Object.entries(scoreObj)) {
+            // For individual metrics, normalize based on the possible range for a single metric
+            const singleMetricMax = totalDilemmas * 3;
+            const singleMetricMin = totalDilemmas * -3;
+            const normalizedScore = ((score - singleMetricMin) / (singleMetricMax - singleMetricMin)) * 100;
         
-        sectionHtml += `<tr>
-            <td>${capitalizeFirstLetter(metric)}</td>
-            <td>${score}</td>
-            <td>${normalizedScore.toFixed(2)}%</td>
-        </tr>`;
-        totalScore += score;
+            sectionHtml += `<tr>
+                <td>${capitalizeFirstLetter(metric)}</td>
+                <td>${score}</td>
+                <td>${normalizedScore.toFixed(2)}%</td>
+            </tr>`;
+            totalScore += score;
         
-        // Add drill-down button for Flow Optimization
-        if (metric === 'flowEfficiency' && title === 'Lean Leadership') {
-            sectionHtml += `<tr><td colspan="3"><button onclick="startFlowOptimizationDrillDown()">Drill Down into Flow Optimization</button></td></tr>`;
+            // Add drill-down button for Flow Optimization
+            if (metric === 'flowEfficiency' && title === 'Lean Leadership') {
+                sectionHtml += `<tr><td colspan="3"><button onclick="startFlowOptimizationDrillDown()">Drill Down into Flow Optimization</button></td></tr>`;
+            }
         }
     }
-}
     // Calculate overall percentage
     const overallPercentage = ((totalScore - minPossibleScore) / (maxPossibleScore - minPossibleScore)) * 100;
     sectionHtml += `</tbody><tfoot><tr>
