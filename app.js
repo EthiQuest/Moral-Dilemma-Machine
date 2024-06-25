@@ -134,10 +134,8 @@ function presentDilemma() {
 function makeChoice(choiceIndex) {
     const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
     const chosenOption = dilemma.options[choiceIndex];
-    
-    if (!scores.answerImpacts) {
-        scores.answerImpacts = [];
-    }
+  
+    scores.answerImpacts = scores.answerImpacts || [];
     
     let impact = {
         question: dilemma.scenario,
@@ -252,7 +250,7 @@ function showResults() {
     document.getElementById('game').style.display = 'none';
     document.getElementById('hrAccess').style.display = 'block';
 
-    console.log('Answer Impacts:', answerImpacts);
+    console.log('Answer Impacts:', scores.answerImpacts);
     console.log('Pillars:', Object.keys(scores.pillars));
 
     createImpactChart('impactChart', answerImpacts, Object.keys(scores.pillars));
