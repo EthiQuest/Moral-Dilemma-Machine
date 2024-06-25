@@ -33,6 +33,11 @@ button:active, button.active {
     font-weight: bold;
 }
 
+#result {
+    display: block;
+    margin-top: 20px;
+}
+
 #hrDetails, #hrAccess {
     display: none;
     background-color: #f0f0f0;
@@ -48,13 +53,15 @@ button:active, button.active {
 
 .chart-container {
     display: none;
-}
-
-.chart-container {
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
     height: 400px;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .icon-text {
