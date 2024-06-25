@@ -5,7 +5,6 @@ let currentDilemma = 0;
 let totalDilemmas = 20;
 let currentFlowQuestion = 0;
 let flowOptimizationScore = 0;
-let answerImpacts = [];
 
 const scores = {
     pillars: {
