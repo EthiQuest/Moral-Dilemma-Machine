@@ -253,7 +253,7 @@ function showResults() {
     console.log('Answer Impacts:', scores.answerImpacts);
     console.log('Pillars:', Object.keys(scores.pillars));
 
-    createImpactChart('impactChart', answerImpacts, Object.keys(scores.pillars));
+    createImpactChart('impactChart', scores.answerImpacts, Object.keys(scores.pillars));
     createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
     createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
     createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
