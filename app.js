@@ -1,14 +1,11 @@
 import dilemmaPool from './dilemmas.js';
 
-(function() {
-    // All your variables and functions go here
-
-    const HR_SECRET_CODE = 'HR1234';
-    let currentDilemma = 0;
-    let totalDilemmas = 20;
-    let currentFlowQuestion = 0;
-    let flowOptimizationScore = 0;
-    let answerImpacts = [];
+const HR_SECRET_CODE = 'HR1234';
+let currentDilemma = 0;
+let totalDilemmas = 20;
+let currentFlowQuestion = 0;
+let flowOptimizationScore = 0;
+let answerImpacts = [];
 
 const scores = {
     pillars: {
@@ -496,7 +493,6 @@ function showHRDetails() {
     document.addEventListener('DOMContentLoaded', function() {
         // Any initialization code goes here
     });
-})();
 
 
 
