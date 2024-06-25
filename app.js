@@ -121,9 +121,10 @@ function presentDilemma() {
 
     const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
     document.getElementById('scenario').innerHTML = `<p><i class="fas fa-exclamation-circle"></i> ${dilemma.scenario}</p>`;
+
     const optionsHtml = dilemma.options.map((option, index) => 
-        `<button ontouchstart="this.classList.add('active')" ontouchend="this.classList.remove('active');makeChoice(${index})" class="icon-text"><i class="fas fa-check-circle"></i> ${option.text}</button>`
-    ).join('');
+    `<button data-choice="${index}" class="icon-text"><i class="fas fa-check-circle"></i> ${option.text}</button>`
+).join('');
     document.getElementById('options').innerHTML = optionsHtml;
 }
 
