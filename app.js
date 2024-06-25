@@ -500,19 +500,26 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('hrAccessButton').addEventListener('click', checkHRCode);
 
     // Add event delegation for dynamically created buttons
+    document.getElementById('options').addEventListener('click', function(event) {
+        if (event.target.matches('button[data-choice]')) {
+            const index = parseInt(event.target.getAttribute('data-choice'));
+            makeChoice(index);
+        }
+    });
+
     document.getElementById('result').addEventListener('click', function(event) {
-        if (event.target.matches('button[onclick^="startFlowOptimizationDrillDown"]')) {
-            startFlowOptimizationDrillDown();
-        } else if (event.target.matches('button[onclick^="answerFlowOptimizationQuestion"]')) {
-            const index = parseInt(event.target.getAttribute('onclick').match(/\d+/)[0]);
+        if (event.target.matches('button[data-flow-option]')) {
+            const index = parseInt(event.target.getAttribute('data-flow-option'));
             answerFlowOptimizationQuestion(index);
+        } else if (event.target.matches('.flow-optimization-drill-down')) {
+            startFlowOptimizationDrillDown();
+        } else if (event.target.matches('.back-to-results')) {
+            showResults();
         }
     });
 
     // Any other initialization code can go here
 });
-
-
 
 
 
