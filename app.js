@@ -407,10 +407,10 @@ function presentFlowOptimizationQuestion() {
     const question = flowOptimizationQuestions[currentFlowQuestion];
     let questionHtml = `<h3>Flow Optimization Question ${currentFlowQuestion + 1}</h3>`;
     questionHtml += `<p>${question.question}</p>`;
+    
     questionHtml += question.options.map((option, index) => 
-        `<button onclick="answerFlowOptimizationQuestion(${index})">${option.text}</button>`
-    ).join('');
-
+    `<button data-flow-option="${index}">${option.text}</button>`
+).join('');
     document.getElementById('result').innerHTML = questionHtml;
 }
 
