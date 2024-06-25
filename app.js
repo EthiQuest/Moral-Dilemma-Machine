@@ -79,7 +79,7 @@ const flowOptimizationQuestions = [
 // functions startAssessment ...
 //
 
-  function startAssessment() {
+function startAssessment() {
     totalDilemmas = parseInt(document.getElementById('dilemmaCount').value);
     if (isNaN(totalDilemmas) || totalDilemmas < 1 || totalDilemmas > dilemmaPool.length) {
         alert(`Please enter a valid number of scenarios (1-${dilemmaPool.length}).`);
