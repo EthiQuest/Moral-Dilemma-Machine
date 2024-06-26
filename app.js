@@ -108,27 +108,6 @@ function resetScores() {
 }
 
 //
-// function presentDilemma ...
-//
-
-function presentDilemma() {
-    if (currentDilemma >= totalDilemmas) {
-        showResults();
-        return;
-    }
-
-    document.getElementById('progress').innerHTML = `<i class="fas fa-tasks"></i> Scenario ${currentDilemma + 1} of ${totalDilemmas}`;
-
-    const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
-    document.getElementById('scenario').innerHTML = `<p><i class="fas fa-exclamation-circle"></i> ${dilemma.scenario}</p>`;
-
-    const optionsHtml = dilemma.options.map((option, index) => 
-    `<button data-choice="${index}" class="icon-text"><i class="fas fa-check-circle"></i> ${option.text}</button>`
-).join('');
-    document.getElementById('options').innerHTML = optionsHtml;
-}
-
-//
 // function makeChoice ...
 //
 
@@ -172,6 +151,10 @@ function makeChoice(choiceIndex) {
     console.error("Error in makeChoice:", error);
   }
 }
+
+//
+// function presentDilemma ...
+//
 
 function presentDilemma() {
   if (currentDilemma >= totalDilemmas) {
