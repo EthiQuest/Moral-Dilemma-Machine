@@ -55,6 +55,10 @@ button, .section, .chart-container {
     margin-right: 10px;
 }
 
+#chartContainers {
+    display: none;
+}
+
 .chart-container {
     display: none;
     width: 100%;
