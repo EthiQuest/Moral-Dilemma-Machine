@@ -133,49 +133,44 @@ function presentDilemma() {
 //
 
 function makeChoice(choiceIndex) {
-    console.log(`makeChoice called with index ${choiceIndex}`);
-    try {
-        const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
-        const chosenOption = dilemma.options[choiceIndex];
+  try {
+    const dilemma = dilemmaPool[currentDilemma % dilemmaPool.length];
+    const chosenOption = dilemma.options[choiceIndex];
+    scores.answerImpacts = scores.answerImpacts || [];
 
-        scores.answerImpacts = scores.answerImpacts || [];
+    let impact = {
+      question: dilemma.scenario,
+      answer: chosenOption.text,
+      impacts: {}
+    };
 
-        let impact = {
-            question: dilemma.scenario,
-            answer: chosenOption.text,
-            impacts: {}
-        };
-
-        for (const [pillar, score] of Object.entries(chosenOption.scores.pillars)) {
-            scores.pillars[pillar] += score;
-            impact.impacts[pillar] = score;
-        }
-
-        scores.answerImpacts.push(impact);
-
-        for (const category in chosenOption.scores) {
-            if (category === 'psychopathic') {
-                scores[category] += chosenOption.scores[category];
-            } else {
-                for (const metric in chosenOption.scores[category]) {
-                    scores[category][metric] += chosenOption.scores[category][metric];
-                }
-            }
-        }
-
-        currentDilemma++;
-        console.log(`Current dilemma: ${currentDilemma}, Total dilemmas: ${totalDilemmas}`);
-
-        if (currentDilemma >= totalDilemmas) {
-            console.log("All dilemmas completed. Calling showResults");
-            showResults();
-        } else {
-            console.log("Presenting next dilemma");
-            presentDilemma();
-        }
-    } catch (error) {
-        console.error("Error in makeChoice:", error);
+    for (const [pillar, score] of Object.entries(chosenOption.scores.pillars)) {
+      scores.pillars[pillar] += score;
+      impact.impacts[pillar] = score;
     }
+
+    scores.answerImpacts.push(impact);
+
+    for (const category in chosenOption.scores) {
+      if (category === 'psychopathic') {
+        scores[category] += chosenOption.scores[category];
+      } else {
+        for (const metric in chosenOption.scores[category]) {
+          scores[category][metric] += chosenOption.scores[category][metric];
+        }
+      }
+    }
+
+    currentDilemma++;
+    
+    if (currentDilemma >= totalDilemmas) {
+      showResults();
+    } else {
+      presentDilemma();
+    }
+  } catch (error) {
+    console.error("Error in makeChoice:", error);
+  }
 }
 
 //
