@@ -228,8 +228,12 @@ function showResults() {
     try {
         let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
 
-        // Impact on the 6 pillars Section
-        resultHtml += createSectionHtml("Impact of Your Decisions on Six Pillars", null, 'impactChart');
+        // Impact on the 6 pillars Section - initialize scoreObj properly or handle null
+        if (scores.answerImpacts && scores.answerImpacts.length > 0) {
+            resultHtml += createSectionHtml("Impact of Your Decisions on Six Pillars", scores.pillars, 'impactChart');
+        } else {
+            resultHtml += "<p>No impacts to display.</p>";
+        }
 
         // Ethical Leadership Section
         resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
