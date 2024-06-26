@@ -221,46 +221,61 @@ function createImpactChart(canvasId, impacts, pillars) {
 // 
 
 function showResults() {
-    console.log("Showing results");
-    let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
+    console.log("showResults function called");
+    try {
+        let resultHtml = "<h2><i class='fas fa-chart-bar'></i> Your Leadership Style Assessment</h2>";
 
-    // Impact on the 6 pillars Section
-    resultHtml += createSectionHtml("Impact of Your Decisions on Six Pillars", null, 'impactChart');
+        // Impact on the 6 pillars Section
+        resultHtml += createSectionHtml("Impact of Your Decisions on Six Pillars", null, 'impactChart');
 
-    // Ethical Leadership Section
-    resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
+        // Ethical Leadership Section
+        resultHtml += createSectionHtml("Ethical Leadership", scores.pillars, 'radarChart');
 
-    // Lean Leadership Section
-    resultHtml += createSectionHtml("Lean Leadership", scores.lean, 'leanRadarChart');
+        // Lean Leadership Section
+        resultHtml += createSectionHtml("Lean Leadership", scores.lean, 'leanRadarChart');
 
-    // Team Leadership Section
-    resultHtml += createSectionHtml("Team Leadership", scores.team, 'teamRadarChart');
+        // Team Leadership Section
+        resultHtml += createSectionHtml("Team Leadership", scores.team, 'teamRadarChart');
 
-    // Psychopathic Tendency
-    const psychopathicPercentage = (scores.psychopathic / (totalDilemmas * 2)) * 100;
-    resultHtml += "<h3>Psychopathic Tendency</h3>";
-    resultHtml += `<p><strong>Score:</strong> ${scores.psychopathic} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
-    if (psychopathicPercentage > 70) {
-        resultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
-    } else if (psychopathicPercentage > 40) {
-        resultHtml += "<p><strong><i class='fas fa-info-circle'></i> Note:</strong> Your decisions sometimes reflect a lack of empathy or consideration for others, which could impact your effectiveness as a leader.</p>";
-    } else {
-        resultHtml += "<p><strong><i class='fas fa-check-circle'></i> Note:</strong> Your decisions generally reflect empathy and consideration for others, which is positive for leadership roles.</p>";
+        // Psychopathic Tendency
+        const psychopathicPercentage = (scores.psychopathic / (totalDilemmas * 2)) * 100;
+        resultHtml += "<h3>Psychopathic Tendency</h3>";
+        resultHtml += `<p><strong>Score:</strong> ${scores.psychopathic} out of ${totalDilemmas * 2} (${psychopathicPercentage.toFixed(2)}%)</p>`;
+        if (psychopathicPercentage > 70) {
+            resultHtml += "<p><strong><i class='fas fa-exclamation-triangle'></i> Note:</strong> Your decision-making style shows a significant tendency towards detachment and self-interest, which may be perceived negatively in leadership roles.</p>";
+        } else if (psychopathicPercentage > 40) {
+            resultHtml += "<p><strong><i class='fas fa-info-circle'></i> Note:</strong> Your decisions sometimes reflect a lack of empathy or consideration for others, which could impact your effectiveness as a leader.</p>";
+        } else {
+            resultHtml += "<p><strong><i class='fas fa-check-circle'></i> Note:</strong> Your decisions generally reflect empathy and consideration for others, which is positive for leadership roles.</p>";
+        }
+
+        document.getElementById('result').innerHTML = resultHtml;
+        document.getElementById('game').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('chartContainers').style.display = 'block';
+        document.getElementById('hrAccess').style.display = 'block';
+
+        console.log('Answer Impacts:', scores.answerImpacts);
+        console.log('Pillars:', Object.keys(scores.pillars));
+
+        document.querySelectorAll('.chart-container').forEach(container => {
+            container.style.display = 'block';
+        });
+
+        // Wrap chart creation in try-catch
+        try {
+            createImpactChart('impactChart', scores.answerImpacts, Object.keys(scores.pillars));
+            createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
+            createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
+            createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
+        } catch (error) {
+            console.error("Error creating charts:", error);
+        }
+
+        console.log("Results displayed successfully");
+    } catch (error) {
+        console.error("Error in showResults:", error);
     }
-    document.getElementById('result').innerHTML = resultHtml;
-    document.getElementById('game').style.display = 'none';
-    document.getElementById('hrAccess').style.display = 'block';
-
-    console.log('Answer Impacts:', scores.answerImpacts);
-    console.log('Pillars:', Object.keys(scores.pillars));
-    document.querySelectorAll('.chart-container').forEach(container => {
-        container.style.display = 'block';
-    });
-
-    createImpactChart('impactChart', scores.answerImpacts, Object.keys(scores.pillars));
-    createRadarChart('radarChart', Object.keys(scores.pillars), Object.values(scores.pillars), 'Ethical Leadership Profile');
-    createRadarChart('leanRadarChart', Object.keys(scores.lean), Object.values(scores.lean), 'Lean Leadership Profile');
-    createRadarChart('teamRadarChart', Object.keys(scores.team), Object.values(scores.team), 'Team Leadership Profile');
 }
 
 //
