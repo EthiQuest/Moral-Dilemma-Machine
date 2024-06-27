@@ -60,7 +60,7 @@ button, .section, .chart-container {
 }
 
 .chart-container {
-    display: none;
+    display: block;
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
