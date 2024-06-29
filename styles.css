@@ -131,3 +131,8 @@ button, .section, .chart-container {
         height: 400px !important; /* Set fixed height on smaller screens */
     }
 }
+
+/* Ensure tooltip container is styled properly */
+.chartjs-tooltip {
+    font-size: 8px !important; /* Further reduce the font size for the tooltip */
+}
