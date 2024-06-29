@@ -193,9 +193,18 @@ function createImpactChart(canvasId, impacts, pillars) {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true, // Maintain aspect ratio for better mobile viewing
+            interaction: {
+                mode: 'index', // Ensure tooltips appear when tapping anywhere on the bar
+                intersect: false // Ensure tooltips appear even if the tap is not exactly on the bar
+            },
             scales: {
-                x: { stacked: true },
-                y: { stacked: true }
+                x: { 
+                    stacked: true 
+                },
+                y: { 
+                    stacked: true 
+                }
             },
             plugins: {
                 tooltip: {
