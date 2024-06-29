@@ -69,7 +69,7 @@ button, .section, .chart-container {
 
 .chart-container canvas {
     width: 100% !important;
-    height: auto !important;
+    height: 400px !important;
 }
 
 .icon-text {
@@ -125,5 +125,9 @@ button, .section, .chart-container {
     input[type="number"], button {
         padding: 8px;
         font-size: 14px;
+    }
+
+    .chart-container canvas {
+        height: 600px !important; /* Increase height on smaller screens */
     }
 }
