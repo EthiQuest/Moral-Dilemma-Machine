@@ -265,7 +265,10 @@ function createImpactChart(canvasId, impacts, pillars) {
                                 const colors = tooltipModel.labelColors[i];
                                 const style = 'background:' + colors.backgroundColor;
                                 const span = '<span style="' + style + '"></span>';
+                                const impact = impacts[context.tooltip.dataPoints[i].datasetIndex];
                                 innerHtml += '<tr><td>' + span + body + '</td></tr>';
+                                innerHtml += `<tr><td>Question: ${impact.question}</td></tr>`;
+                                innerHtml += `<tr><td>Answer: ${impact.answer}</td></tr>`;
                             });
 
                             innerHtml += '</tbody>';
