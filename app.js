@@ -193,9 +193,9 @@ function createImpactChart(canvasId, impacts, pillars) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Allow the chart to take full height
+            maintainAspectRatio: true, // Maintain aspect ratio
             interaction: {
-                mode: 'index', // Ensure tooltips appear when tapping anywhere on the bar
+                mode: 'index',
                 intersect: false // Ensure tooltips appear even if the tap is not exactly on the bar
             },
             scales: {
@@ -210,7 +210,6 @@ function createImpactChart(canvasId, impacts, pillars) {
                 tooltip: {
                     mode: 'index',
                     intersect: false,
-                    boxWidth: 200, // Increase tooltip box width
                     callbacks: {
                         title: function(context) {
                             return `Question ${context[0].datasetIndex + 1}`;
