@@ -279,10 +279,15 @@ function showResults() {
             resultHtml += "<p><strong><i class='fas fa-check-circle'></i> Note:</strong> Your decisions generally reflect empathy and consideration for others, which is positive for leadership roles.</p>";
         }
 
+        console.log("Updating innerHTML of 'result' element");
         resultElement.innerHTML = resultHtml;
+        console.log("Setting style of 'game' element to 'none'");
         gameElement.style.display = 'none';
+        console.log("Setting style of 'result' element to 'block'");
         resultElement.style.display = 'block';
+        console.log("Setting style of 'chartContainers' element to 'block'");
         chartContainersElement.style.display = 'block';
+        console.log("Setting style of 'hrAccess' element to 'block'");
         hrAccessElement.style.display = 'block';
 
         console.log('Answer Impacts:', scores.answerImpacts);
