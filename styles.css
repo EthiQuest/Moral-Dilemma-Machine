@@ -69,7 +69,7 @@ button, .section, .chart-container {
 
 .chart-container canvas {
     width: 100% !important;
-    height: 400px !important;
+    height: auto !important;
 }
 
 .icon-text {
@@ -128,6 +128,6 @@ button, .section, .chart-container {
     }
 
     .chart-container canvas {
-        height: 400px !important; /* Increase height on smaller screens */
+        height: 400px !important; /* Set fixed height on smaller screens */
     }
 }
