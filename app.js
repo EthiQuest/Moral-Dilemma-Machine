@@ -218,24 +218,73 @@ function createImpactChart(canvasId, impacts, pillars) {
             },
             plugins: {
                 tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    bodyFont: {
-                        size: 8 // Further reduce the font size for the tooltip text
-                    },
-                    callbacks: {
-                        title: function(context) {
-                            return `Question ${context[0].datasetIndex + 1}`;
-                        },
-                        label: function(context) {
-                            const impact = impacts[context.datasetIndex];
-                            return [
-                                `Pillar: ${context.label}`,
-                                `Impact: ${context.raw}`,
-                                `Question: ${impact.question}`,
-                                `Answer: ${impact.answer}`
-                            ].join('\n');
+                    enabled: false,
+                    external: function(context) {
+                        // Tooltip Element
+                        let tooltipEl = document.getElementById('chartjs-tooltip');
+                        if (!tooltipEl) {
+                            tooltipEl = document.createElement('div');
+                            tooltipEl.id = 'chartjs-tooltip';
+                            tooltipEl.innerHTML = '<table></table>';
+                            document.body.appendChild(tooltipEl);
                         }
+
+                        // Hide if no tooltip
+                        const tooltipModel = context.tooltip;
+                        if (tooltipModel.opacity === 0) {
+                            tooltipEl.style.opacity = 0;
+                            return;
+                        }
+
+                        // Set caret Position
+                        tooltipEl.classList.remove('above', 'below', 'no-transform');
+                        if (tooltipModel.yAlign) {
+                            tooltipEl.classList.add(tooltipModel.yAlign);
+                        } else {
+                            tooltipEl.classList.add('no-transform');
+                        }
+
+                        function getBody(bodyItem) {
+                            return bodyItem.lines;
+                        }
+
+                        // Set Text
+                        if (tooltipModel.body) {
+                            const titleLines = tooltipModel.title || [];
+                            const bodyLines = tooltipModel.body.map(getBody);
+
+                            let innerHtml = '<thead>';
+
+                            titleLines.forEach(function(title) {
+                                innerHtml += '<tr><th>' + title + '</th></tr>';
+                            });
+
+                            innerHtml += '</thead><tbody>';
+
+                            bodyLines.forEach(function(body, i) {
+                                const colors = tooltipModel.labelColors[i];
+                                const style = 'background:' + colors.backgroundColor;
+                                const span = '<span style="' + style + '"></span>';
+                                innerHtml += '<tr><td>' + span + body + '</td></tr>';
+                            });
+
+                            innerHtml += '</tbody>';
+
+                            const tableRoot = tooltipEl.querySelector('table');
+                            tableRoot.innerHTML = innerHtml;
+                        }
+
+                        // `this` will be the overall tooltip
+                        const position = context.chart.canvas.getBoundingClientRect();
+
+                        // Display, position, and set styles for font
+                        tooltipEl.style.opacity = 1;
+                        tooltipEl.style.position = 'absolute';
+                        tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                        tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                        tooltipEl.style.fontSize = '10px'; // Reduce font size for tooltips
+                        tooltipEl.style.padding = tooltipModel.padding + 'px ' + tooltipModel.padding + 'px';
+                        tooltipEl.style.pointerEvents = 'none';
                     }
                 },
                 legend: {
