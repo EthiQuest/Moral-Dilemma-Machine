@@ -181,6 +181,12 @@ let impactChart; // Declare a variable to store the chart instance
 
 function createImpactChart(canvasId, impacts, pillars) {
     const ctx = document.getElementById(canvasId).getContext('2d');
+    
+    // If a chart instance already exists, destroy it before creating a new one
+    if (impactChart) {
+        impactChart.destroy();
+    }
+
     const datasets = impacts.map((impact, index) => ({
         label: `Q${index + 1}`,
         data: pillars.map(pillar => impact.impacts[pillar] || 0),
@@ -195,7 +201,7 @@ function createImpactChart(canvasId, impacts, pillars) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             interaction: {
                 mode: 'nearest',
                 axis: 'x',
@@ -217,40 +223,40 @@ function createImpactChart(canvasId, impacts, pillars) {
                             size: 10
                         }
                     }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: function(context) {
-                                return `Question ${context[0].dataset.label}`;
-                            },
-                            label: function(context) {
-                                const impact = impacts[context.datasetIndex];
-                                return [
-                                    `Pillar: ${context.label}`,
-                                    `Impact: ${context.raw}`,
-                                    `Question: ${impact.question}`,
-                                    `Answer: ${impact.answer}`
-                                ];
-                            }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return `Question ${context[0].dataset.label}`;
+                        },
+                        label: function(context) {
+                            const impact = impacts[context.datasetIndex];
+                            return [
+                                `Pillar: ${context.label}`,
+                                `Impact: ${context.raw}`,
+                                `Question: ${impact.question}`,
+                                `Answer: ${impact.answer}`
+                            ];
                         }
-                    },
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                size: 10
-                            },
-                            generateLabels: function(chart) {
-                                const data = chart.data.datasets;
-                                return data.map((dataset, i) => ({
-                                    text: dataset.label,
-                                    fillStyle: dataset.backgroundColor,
-                                    hidden: false,
-                                    index: i
-                                }));
-                            }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 10
+                        },
+                        generateLabels: function(chart) {
+                            const data = chart.data.datasets;
+                            return data.map((dataset, i) => ({
+                                text: dataset.label,
+                                fillStyle: dataset.backgroundColor,
+                                hidden: false,
+                                index: i
+                            }));
                         }
                     }
                 }
@@ -269,7 +275,6 @@ function createImpactChart(canvasId, impacts, pillars) {
         }
     });
 }
-
 function openModalWithDetails(questionIndex) {
     const impact = scores.answerImpacts[questionIndex];
     const modal = document.getElementById("infoModal");
