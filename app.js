@@ -203,7 +203,7 @@ function createImpactChart(canvasId, impacts, pillars) {
                     stacked: true,
                     ticks: {
                         font: {
-                            size: 12 // Adjust the font size for the x-axis labels
+                            size: 10 // Further reduce the font size for the x-axis labels
                         }
                     }
                 },
@@ -211,7 +211,7 @@ function createImpactChart(canvasId, impacts, pillars) {
                     stacked: true,
                     ticks: {
                         font: {
-                            size: 12 // Adjust the font size for the y-axis labels
+                            size: 10 // Further reduce the font size for the y-axis labels
                         }
                     }
                 }
@@ -221,7 +221,7 @@ function createImpactChart(canvasId, impacts, pillars) {
                     mode: 'index',
                     intersect: false,
                     bodyFont: {
-                        size: 10 // Adjust the font size for the tooltip text
+                        size: 8 // Further reduce the font size for the tooltip text
                     },
                     callbacks: {
                         title: function(context) {
@@ -241,7 +241,7 @@ function createImpactChart(canvasId, impacts, pillars) {
                 legend: {
                     labels: {
                         font: {
-                            size: 12 // Adjust the font size for the legend text
+                            size: 10 // Further reduce the font size for the legend text
                         }
                     }
                 }
