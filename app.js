@@ -193,25 +193,25 @@ function createImpactChart(canvasId, impacts, pillars) {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true, // Maintain aspect ratio
+            maintainAspectRatio: true,
             interaction: {
                 mode: 'index',
-                intersect: false // Ensure tooltips appear even if the tap is not exactly on the bar
+                intersect: false
             },
             scales: {
-                x: { 
+                x: {
                     stacked: true,
                     ticks: {
                         font: {
-                            size: 10 // Further reduce the font size for the x-axis labels
+                            size: 10
                         }
                     }
                 },
-                y: { 
+                y: {
                     stacked: true,
                     ticks: {
                         font: {
-                            size: 10 // Further reduce the font size for the y-axis labels
+                            size: 10
                         }
                     }
                 }
@@ -265,7 +265,8 @@ function createImpactChart(canvasId, impacts, pillars) {
                                 const colors = tooltipModel.labelColors[i];
                                 const style = 'background:' + colors.backgroundColor;
                                 const span = '<span style="' + style + '"></span>';
-                                const impact = impacts[context.tooltip.dataPoints[i].datasetIndex];
+                                const dataPoint = context.tooltip.dataPoints[i];
+                                const impact = impacts[dataPoint.datasetIndex];
                                 innerHtml += '<tr><td>' + span + body + '</td></tr>';
                                 innerHtml += `<tr><td>Question: ${impact.question}</td></tr>`;
                                 innerHtml += `<tr><td>Answer: ${impact.answer}</td></tr>`;
@@ -293,7 +294,7 @@ function createImpactChart(canvasId, impacts, pillars) {
                 legend: {
                     labels: {
                         font: {
-                            size: 10 // Further reduce the font size for the legend text
+                            size: 10
                         }
                     }
                 }
