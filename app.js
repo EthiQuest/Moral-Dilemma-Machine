@@ -182,7 +182,7 @@ function createImpactChart(canvasId, impacts, pillars) {
     const datasets = impacts.map((impact, index) => ({
         label: `Q${index + 1}`,
         data: pillars.map(pillar => impact.impacts[pillar] || 0),
-        backgroundColor: (context) => impact.impacts[pillars[context.dataIndex]] > 0 ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)'
+        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`
     }));
 
     new Chart(ctx, {
@@ -287,15 +287,26 @@ function createImpactChart(canvasId, impacts, pillars) {
                         tooltipEl.style.position = 'absolute';
                         tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
                         tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                        tooltipEl.style.fontSize = '10px'; // Reduce font size for tooltips
+                        tooltipEl.style.fontSize = '10px';
                         tooltipEl.style.padding = tooltipModel.padding + 'px ' + tooltipModel.padding + 'px';
                         tooltipEl.style.pointerEvents = 'none';
                     }
                 },
                 legend: {
+                    display: true,
+                    position: 'top',
                     labels: {
                         font: {
                             size: 10
+                        },
+                        generateLabels: function(chart) {
+                            const data = chart.data.datasets;
+                            return data.map((dataset, i) => ({
+                                text: dataset.label,
+                                fillStyle: dataset.backgroundColor,
+                                hidden: false,
+                                index: i
+                            }));
                         }
                     }
                 }
