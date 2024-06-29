@@ -128,6 +128,6 @@ button, .section, .chart-container {
     }
 
     .chart-container canvas {
-        height: 500px !important; /* Increase height on smaller screens */
+        height: 400px !important; /* Increase height on smaller screens */
     }
 }
