@@ -364,7 +364,7 @@ function createRadarChart(canvasId, labels, data, title) {
                     angleLines: {
                         display: false
                     },
-                    suggestedMin: -totalDilemmas * 3,
+                    suggestedMin: 0,
                     suggestedMax: totalDilemmas * 3,
                     ticks: {
                         stepSize: totalDilemmas
