@@ -200,16 +200,29 @@ function createImpactChart(canvasId, impacts, pillars) {
             },
             scales: {
                 x: { 
-                    stacked: true 
+                    stacked: true,
+                    ticks: {
+                        font: {
+                            size: 12 // Adjust the font size for the x-axis labels
+                        }
+                    }
                 },
                 y: { 
-                    stacked: true 
+                    stacked: true,
+                    ticks: {
+                        font: {
+                            size: 12 // Adjust the font size for the y-axis labels
+                        }
+                    }
                 }
             },
             plugins: {
                 tooltip: {
                     mode: 'index',
                     intersect: false,
+                    bodyFont: {
+                        size: 10 // Adjust the font size for the tooltip text
+                    },
                     callbacks: {
                         title: function(context) {
                             return `Question ${context[0].datasetIndex + 1}`;
@@ -222,6 +235,13 @@ function createImpactChart(canvasId, impacts, pillars) {
                                 `Question: ${impact.question}`,
                                 `Answer: ${impact.answer}`
                             ].join('\n');
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 12 // Adjust the font size for the legend text
                         }
                     }
                 }
