@@ -7,20 +7,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Leadership Decision Assessment</title>
-    
+
     <!-- Manifest and icon -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192x192.png">
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module" src="app.js"></script>
+    <script src="app.js" defer></script>
 </head>
-
 
 <body>
     <h1 class="icon-text"><i class="fas fa-balance-scale"></i>Leadership Decision Assessment</h1>
@@ -35,8 +34,8 @@
         <div id="options"></div>
     </div>
 
-    <div id="result">
-        <div id="chartContainers" style="display:none;">
+    <div id="result" style="display:none;">
+        <div id="chartContainers">
             <div class="chart-container">
                 <canvas id="radarChart"></canvas>
             </div>
