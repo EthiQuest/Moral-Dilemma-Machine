@@ -177,6 +177,8 @@ function presentDilemma() {
 // function createImpactChart .....
 //
 
+let impactChart; // Declare a variable to store the chart instance
+
 function createImpactChart(canvasId, impacts, pillars) {
     const ctx = document.getElementById(canvasId).getContext('2d');
     const datasets = impacts.map((impact, index) => ({
@@ -185,7 +187,7 @@ function createImpactChart(canvasId, impacts, pillars) {
         backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.6)`
     }));
 
-    new Chart(ctx, {
+    impactChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: pillars,
@@ -215,105 +217,92 @@ function createImpactChart(canvasId, impacts, pillars) {
                             size: 10
                         }
                     }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    enabled: false,
-                    external: function(context) {
-                        // Tooltip Element
-                        let tooltipEl = document.getElementById('chartjs-tooltip');
-                        if (!tooltipEl) {
-                            tooltipEl = document.createElement('div');
-                            tooltipEl.id = 'chartjs-tooltip';
-                            tooltipEl.innerHTML = '<table></table>';
-                            document.body.appendChild(tooltipEl);
-                        }
-
-                        // Hide if no tooltip
-                        const tooltipModel = context.tooltip;
-                        if (tooltipModel.opacity === 0) {
-                            tooltipEl.style.opacity = 0;
-                            return;
-                        }
-
-                        // Set caret Position
-                        tooltipEl.classList.remove('above', 'below', 'no-transform');
-                        if (tooltipModel.yAlign) {
-                            tooltipEl.classList.add(tooltipModel.yAlign);
-                        } else {
-                            tooltipEl.classList.add('no-transform');
-                        }
-
-                        function getBody(bodyItem) {
-                            return bodyItem.lines;
-                        }
-
-                        // Set Text
-                        if (tooltipModel.body) {
-                            const titleLines = tooltipModel.title || [];
-                            const bodyLines = tooltipModel.body.map(getBody);
-
-                            let innerHtml = '<thead>';
-
-                            titleLines.forEach(function(title) {
-                                innerHtml += '<tr><th>' + title + '</th></tr>';
-                            });
-
-                            innerHtml += '</thead><tbody>';
-
-                            bodyLines.forEach(function(body, i) {
-                                const colors = tooltipModel.labelColors[i];
-                                const style = 'background:' + colors.backgroundColor;
-                                const span = '<span style="' + style + '"></span>';
-                                const dataPoint = context.tooltip.dataPoints[i];
-                                const impact = impacts[dataPoint.datasetIndex];
-                                innerHtml += '<tr><td>' + span + body + '</td></tr>';
-                                innerHtml += `<tr><td>Question: ${impact.question}</td></tr>`;
-                                innerHtml += `<tr><td>Answer: ${impact.answer}</td></tr>`;
-                            });
-
-                            innerHtml += '</tbody>';
-
-                            const tableRoot = tooltipEl.querySelector('table');
-                            tableRoot.innerHTML = innerHtml;
-                        }
-
-                        // `this` will be the overall tooltip
-                        const position = context.chart.canvas.getBoundingClientRect();
-
-                        // Display, position, and set styles for font
-                        tooltipEl.style.opacity = 1;
-                        tooltipEl.style.position = 'absolute';
-                        tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
-                        tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                        tooltipEl.style.fontSize = '10px';
-                        tooltipEl.style.padding = tooltipModel.padding + 'px ' + tooltipModel.padding + 'px';
-                        tooltipEl.style.pointerEvents = 'none';
-                    }
                 },
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        font: {
-                            size: 10
-                        },
-                        generateLabels: function(chart) {
-                            const data = chart.data.datasets;
-                            return data.map((dataset, i) => ({
-                                text: dataset.label,
-                                fillStyle: dataset.backgroundColor,
-                                hidden: false,
-                                index: i
-                            }));
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return `Question ${context[0].dataset.label}`;
+                            },
+                            label: function(context) {
+                                const impact = impacts[context.datasetIndex];
+                                return [
+                                    `Pillar: ${context.label}`,
+                                    `Impact: ${context.raw}`,
+                                    `Question: ${impact.question}`,
+                                    `Answer: ${impact.answer}`
+                                ];
+                            }
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 10
+                            },
+                            generateLabels: function(chart) {
+                                const data = chart.data.datasets;
+                                return data.map((dataset, i) => ({
+                                    text: dataset.label,
+                                    fillStyle: dataset.backgroundColor,
+                                    hidden: false,
+                                    index: i
+                                }));
+                            }
                         }
                     }
                 }
             }
         }
     });
+
+    // Add click event listener to open modal with detailed information
+    ctx.canvas.addEventListener('click', function(evt) {
+        const points = impactChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+
+        if (points.length) {
+            const firstPoint = points[0];
+            const selectedIndex = firstPoint.datasetIndex;
+            openModalWithDetails(selectedIndex);
+        }
+    });
 }
+
+function openModalWithDetails(questionIndex) {
+    const impact = scores.answerImpacts[questionIndex];
+    const modal = document.getElementById("infoModal");
+    const modalDetails = document.getElementById("modalDetails");
+
+    let detailsHtml = `<h2>Details for Question ${questionIndex + 1}</h2>`;
+    detailsHtml += `<p><strong>Question:</strong> ${impact.question}</p>`;
+    detailsHtml += `<p><strong>Answer:</strong> ${impact.answer}</p>`;
+    detailsHtml += "<ul>";
+    for (const [pillar, value] of Object.entries(impact.impacts)) {
+        detailsHtml += `<li><strong>${pillar}:</strong> ${value}</li>`;
+    }
+    detailsHtml += "</ul>";
+
+    modalDetails.innerHTML = detailsHtml;
+    modal.style.display = "block";
+}
+
+// Close modal when the user clicks on <span> (x)
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById("infoModal");
+    const span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+});
 
 //
 // function showResults 
