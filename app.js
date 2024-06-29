@@ -289,6 +289,7 @@ function showResults() {
         console.log('Pillars:', Object.keys(scores.pillars));
 
         document.querySelectorAll('.chart-container').forEach(container => {
+            console.log('Setting display for container', container);
             container.style.display = 'block';
         });
 
