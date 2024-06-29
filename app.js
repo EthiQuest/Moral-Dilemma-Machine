@@ -195,7 +195,8 @@ function createImpactChart(canvasId, impacts, pillars) {
             responsive: true,
             maintainAspectRatio: true,
             interaction: {
-                mode: 'index',
+                mode: 'nearest',
+                axis: 'x',
                 intersect: false
             },
             scales: {
