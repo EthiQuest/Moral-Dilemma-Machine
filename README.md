@@ -24,7 +24,7 @@ The Moral Dilemma Machine is an interactive web application designed to assess e
 
 ## Structure Of Repository 
 ```
-/your-app
+/root-directory
 │
 ├── /charts
 │   ├── createImpactChart.js
