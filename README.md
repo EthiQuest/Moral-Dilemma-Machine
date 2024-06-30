@@ -24,7 +24,7 @@ The Moral Dilemma Machine is an interactive web application designed to assess e
 
 
 ## Structure Of The Repository
-
+```
 /app-root-directory 
 │ 
 ├── /charts 
@@ -48,7 +48,7 @@ The Moral Dilemma Machine is an interactive web application designed to assess e
 ├── index.html
 ├── main.js
 └── styles.css
-
+```
 
 ## Installation
 No installation required. Access the app through a web browser at [your-github-username].github.io/Moral-Dilemma-Machine
