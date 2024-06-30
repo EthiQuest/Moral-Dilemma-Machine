@@ -22,6 +22,33 @@ The Moral Dilemma Machine is an interactive web application designed to assess e
 - Uses Chart.js for data visualization
 - Implements Progressive Web App (PWA) features for mobile use
 
+## Structure Of Repository 
+```
+/your-app
+│
+├── /charts
+│   ├── createImpactChart.js
+│   └── createRadarChart.js
+│
+├── /flowOptimization
+│   ├── answerFlowOptimizationQuestion.js
+│   ├── presentFlowOptimizationQuestion.js
+│   └── showFlowOptimizationResults.js
+│
+├── /modals
+│   └── openModalWithDetails.js
+│
+├── /utils
+│   ├── capitalizeFirstLetter.js
+│   ├── createSectionHtml.js
+│   └── resetScores.js
+│
+├── app.js
+├── index.html
+├── main.js
+└── styles.css
+```
+
 ## Installation
 No installation required. Access the app through a web browser at [your-github-username].github.io/Moral-Dilemma-Machine
 
