@@ -479,27 +479,41 @@ function createRadarChart(canvasId, labels, data, title) {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             elements: {
                 line: {
+                    tension: 0.4, // Adjust the tension to make the chart more rounded
                     borderWidth: 3
                 }
             },
             scales: {
                 r: {
                     angleLines: {
-                        display: false
+                        display: true,
+                        color: 'rgba(255, 255, 255, 0.3)' // Lighten the color of angle lines
+                    },
+                    grid: {
+                        circular: true, // Ensure the grid lines are circular
+                        color: 'rgba(255, 255, 255, 0.3)' // Lighten the color of grid lines
+                    },
+                    pointLabels: {
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        },
+                        color: 'rgba(255, 255, 255, 0.7)' // Lighten the color of point labels
+                    },
+                    ticks: {
+                        display: false // Hide the radial ticks for a cleaner look
                     },
                     suggestedMin: 0,
-                    suggestedMax: totalDilemmas * 3,
-                    ticks: {
-                        stepSize: totalDilemmas
-                    }
+                    suggestedMax: totalDilemmas * 3
                 }
             },
             plugins: {
                 legend: {
-                    display: true,
-                    position: 'top',
+                    display: false // Hide the legend for a cleaner look
                 },
                 title: {
                     display: true,
