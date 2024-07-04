@@ -50,7 +50,7 @@ The Moral Dilemma Machine is an interactive web application designed to assess e
 ```
 
 ## Installation
-No installation required. Access the app through a web browser at [your-github-username].github.io/Moral-Dilemma-Machine
+No installation required. Access the app through a web browser at porskrog.github.io/Moral-Dilemma-Machine
 
 ## Usage
 1. Open the app in a web browser.
