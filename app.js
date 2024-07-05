@@ -2,7 +2,7 @@ import dilemmaPool from './dilemmas.js';
  
 const HR_SECRET_CODE = 'HR1234';
 let currentDilemma = 0;
-let totalDilemmas = 20;
+let totalDilemmas = 8;
 let currentFlowQuestion = 0;
 let flowOptimizationScore = 0;
 
